@@ -4,11 +4,13 @@ public class SubTask extends Task {
 
     public SubTask(String name, String description) {
         super(name, description);
+        typeOfTask = TypeOfTask.SUBTASK;
     }
 
     public SubTask(String name, String description, int parentsId) {
         super(name, description);
         this.parentsId = parentsId;
+        typeOfTask = TypeOfTask.SUBTASK;
     }
 
     public int getParentsId() {
@@ -17,7 +19,6 @@ public class SubTask extends Task {
 
     public void setParentsId(int parentsId) {
         this.parentsId = parentsId;
-        typeOfTask = TypeOfTask.SUBTASK;
     }
 
     @Override

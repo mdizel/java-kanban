@@ -6,8 +6,8 @@ public class Task {
     protected int id;
 
     public Task(String name, String description) {
-        id = TaskManager.getId();
-        this.name = name;
+        id = TaskManager.getId();                           // Метод по проставлению ID и его логика находятся в
+        this.name = name;                                   // TaskManager. Здесь он только вызывается.
         this.description = description;
         typeOfTask = TypeOfTask.TASK;
     }

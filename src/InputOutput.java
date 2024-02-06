@@ -64,11 +64,11 @@ public class InputOutput {
         getAllTaskFromMap(sortAllTask(Status.DONE));
         System.out.println("Конец списка после 2-го изменения статусов");
         System.out.println("________________________________________");
-        System.out.println("Загружаем новую подзадачу задачу или заменяем старую, удаляем 10009");
+        System.out.println("Загружаем новую подзадачу задачу или заменяем старую, удаляем");
         taskManager.addSubTaskToEpic(subTask3, 10009);
         taskManager.addSubTaskToEpic(subTask4, 10004);
             taskManager.addSubTaskToEpic(subTask7, 10009);
-        taskManager.changeTask(10005, subTask5);
+        taskManager.changeTask(10005, subTask5, Status.NEW);
         taskManager.deleteTask(10002);
         taskManager.deleteTask(10006);
         System.out.println("Задания со статусом NEW ");
@@ -90,7 +90,7 @@ public class InputOutput {
         System.out.println(taskManager.getEpics());
         System.out.println("________________________________________");
         System.out.println("Получаем задачу по Id");
-        System.out.println(taskManager.getTask(10009));
+        System.out.println(taskManager.getTask(10002));
         System.out.println("Получаем задачу по Id 10007");
         System.out.println(taskManager.getTask(10007));
         System.out.println("Получаем задачу по Id 10004");
@@ -101,6 +101,10 @@ public class InputOutput {
         System.out.println(taskManager.getTasks());
         System.out.println(taskManager.getEpics());
         System.out.println("________________________________________");
+        System.out.println(taskManager.getTasksList());
+        System.out.println(taskManager.getEpicsList());
+        System.out.println(taskManager.getSubtasksList());
+        System.out.println(taskManager.getSubtaskFromEpicList(10004));
     }
     Task task = new Task("Покрасить стены", "Нужно покрасить стены в коридоре в зеленый цвет.");
     Task task1 = new Task("Прополоть картошку", "Огородные работы");

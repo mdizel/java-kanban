@@ -1,7 +1,8 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TaskManager {
-    private static int id = 10000;
+    private static int id = 10000;        // удовлетворяет ТЗ-4, в ТЗ-5 при необходимости поменяю
     HashMap<Integer, Task> tasks = new HashMap<>();
     HashMap<Integer, Epic> epics = new HashMap<>();
 
@@ -13,7 +14,7 @@ public class TaskManager {
     }
 
     public void setAnyTask(Object object) {          //Загружаем задачи, эпики загружаются с подзадачами, если они идут
-        if (object instanceof Epic) {                  //за эпиками, иначе подзадачи загружаются к определенному эпику
+        if (object instanceof Epic) {        //за эпиками, иначе подзадачи загружаются к определенному эпикуп о Id эпика
             int id = ((Epic) object).getId();
             lastEpicId = id;
             ((Epic) object).setStatus(Status.NEW);
@@ -44,37 +45,60 @@ public class TaskManager {
     public HashMap<Integer, Epic> getEpics() {
         return epics;
     }
+    public ArrayList<String> getEpicsList() {                      //Выводим все эпики списком
+        ArrayList<String> epicsList = new ArrayList<>();
+        for (Epic epic: epics.values()) {
+            epicsList.add(epic.getName());
+        }
+        return epicsList;
+    }
+
+    public ArrayList<String> getTasksList() {                     //Выводим все задачи списком
+        ArrayList<String> tasksList = new ArrayList<>();
+        for (Task task: tasks.values()) {
+            tasksList.add(task.getName());
+        }
+        return tasksList;
+    }
+
+    public ArrayList<String> getSubtasksList() {                      //Выводим все подзадачи списком
+        ArrayList<String> subtasksList = new ArrayList<>();
+        for (SubTask subTasktask: getAllSubtask().values()) {
+            subtasksList.add(subTasktask.getName());
+        }
+        return subtasksList;
+    }
 
     public HashMap<Integer, Task> getTaskAndSubtasks() {                   //Получаем одноуровневый список всех задач
-        HashMap<Integer, Task> taskAndSubtasks = new HashMap<>();
+        HashMap<Integer, Task> taskAndSubtasks = new HashMap<>();   //для удобства доступа к элементам в других методах
         taskAndSubtasks.putAll(tasks);
         taskAndSubtasks.putAll(epics);
         taskAndSubtasks.putAll(getAllSubtask());
         return taskAndSubtasks;
     }
-
-    public void changeTask(int id, Task task) {                         //заменяем задачу
+                                                                       //заменяем задачу
+    public void changeTask(int id, Task task, Status status) {    // здесь Id того что меняем и task на что меняем
         if (!getTaskAndSubtasks().containsKey(id)) {
             System.out.println("Id " + id + " dont exist");
             return;
         }
-        task.setId(id);
+        task.setId(id);         //новый таск должен получить id заменяемого элемента, любой объект появляется с Id
         if (task instanceof SubTask) {
             Task oldTask = getTaskAndSubtasks().get(id);
             int parentsId = ((SubTask) oldTask).getParentsId();
             ((SubTask) task).setParentsId(parentsId);
             HashMap<Integer, SubTask> subtasks = getSubtaskFromEpic(parentsId);
             subtasks.put(id, (SubTask) task);
-            subtasks.get(id).setStatus(Status.NEW);
+            subtasks.get(id).setStatus(status);
             checkStatus(parentsId);
             Epic epic = epics.get(parentsId);
             epic.setSubtacks(subtasks);
         } else if (task instanceof Epic) {
             epics.put(id, (Epic) task);
-            epics.get(id).setStatus(Status.NEW);
+            epics.get(id).setStatus(status);
         } else {
             tasks.put(id, task);
-            tasks.get(id).setStatus(Status.NEW);
+            tasks.get(id).setStatus(status);
         }
     }
 
@@ -108,9 +132,20 @@ public class TaskManager {
         return epic.getSubtacks();
     }
 
+    public ArrayList<String> getSubtaskFromEpicList(int epicId) {          //Выводим подзадачи отдельного Эпика списком
+        HashMap<Integer, SubTask> subtasks = getSubtaskFromEpic(epicId);
+        ArrayList<String> subtaskFromEpicList = new ArrayList<>();
+        for (SubTask subTask: subtasks.values()) {
+            subtaskFromEpicList.add(subTask.getName());
+        }
+        return subtaskFromEpicList;
+    }
+
+
     public Task getTask(int id) {                                            // Получаем задачу по Id
-        if (!getTaskAndSubtasks().containsKey(id)) {
+        if (!getTaskAndSubtasks().containsKey(id)) { // в tasks- задачи в epics- эпики subtasks выводится методом из эпиков
             System.out.println("Id " + id + " dont exist");
+            return new Task("none", "none");
         }
         return getTaskAndSubtasks().get(id);
     }
@@ -149,7 +184,7 @@ public class TaskManager {
         }
     }
 
-    public void setChangeStatus(int id, Status newStatus) {                  //Меняем статус статус задачи
+    public void setChangeStatus(int id, Status newStatus) {     //Замена статуса задачи пользователем
         if (!getTaskAndSubtasks().containsKey(id)) {
             System.out.println("Error: incorrect Id");
         } else {
