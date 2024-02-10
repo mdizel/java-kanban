@@ -5,12 +5,20 @@ public class Task {
     protected TypeOfTask typeOfTask;
     protected int id;
 
-    public Task(String name, String description) {
-        id = TaskManager.getId();                           // Метод по проставлению ID и его логика находятся в
-        this.name = name;                                   // TaskManager. Здесь он только вызывается.
+    public Task(String name, String description, Status status) {
+        this.name = name;
         this.description = description;
+        this.status = status;
         typeOfTask = TypeOfTask.TASK;
     }
+    public Task(int id, String name, String description, Status status) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.id = id;
+        typeOfTask = TypeOfTask.TASK;
+    }
+
 
     public int getId() {
         return id;

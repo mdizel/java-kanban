@@ -1,13 +1,14 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /*Этот класс полностью создан для проверки работы программы, пока не стал убирать его, но
-по заданию его функционал не нужен. Также убрал сюда некоторые неиспользуемые обработки*/
+по заданию его функционал не нужен. Также убрал сюда некоторые неиспользуемые обработки
 public class InputOutput {
     TaskManager taskManager = new TaskManager();
         public void test() {         // Метод для теста программы
-        taskManager.setAnyTask(task);
+
+            taskManager.setAnyTask(task);
         System.out.println("Пробуем импортировать Подзадачу к которой нет эпика");
-        taskManager.setAnyTask(subTask5);
         taskManager.setAnyTask(task1);
         taskManager.setAnyTask(task2);
         taskManager.setAnyTask(epic);
@@ -22,8 +23,9 @@ public class InputOutput {
         System.out.println("Список всех задач и подзазач");
         System.out.println(taskManager.getTaskAndSubtasks());
         System.out.println("Конец списка задач и подзадач");
-        System.out.println("________________________________________");
-
+        System.out.println("______1111__________________________________");
+            System.out.println(taskManager.getEpicsList());
+            System.out.println("________________________________________");
         System.out.println("Печатаем задачи с сортировкой.");
         System.out.println("Задания со статусом NEW ");
         getAllTaskFromMap(sortAllTask(Status.NEW));
@@ -184,4 +186,4 @@ public class InputOutput {
             System.out.println(getShortTaskInfo(hashMap.get(key))); //если заменить sout на какой- нибудь метод для вывода
         }                                                           // куда-либо, возможно будет полезно
     }
-}
+}*/
