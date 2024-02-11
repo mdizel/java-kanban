@@ -8,11 +8,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TaskManagerTest {
     TaskManager taskManager = new TaskManager();
 
-
     @Test
     public void setTask() {
         Task task = new Task("Test addNewTask", "Test addNewTask description", Status.NEW);
-       Task task1 = new Task("Test addNewTask2", "Test addNewTask2", Status.IN_PROGRESS);
+        Task task1 = new Task("Test addNewTask2", "Test addNewTask2", Status.IN_PROGRESS);
         taskManager.setTask(task);
         taskManager.setTask(task1);
         final int taskId = task.getId();
@@ -27,7 +26,7 @@ public class TaskManagerTest {
 
         assertNotNull(tasks, "Задачи не возвращаются.");
         assertEquals(2, tasks.size(), "Неверное количество задач.");
-       assertEquals(task, tasks.get(0), "Задачи совпадают.");
+       assertEquals(task, tasks.getFirst(), "Задачи совпадают.");
            }
 
 
@@ -51,7 +50,7 @@ public class TaskManagerTest {
 
             assertNotNull(epics, "Эпики не возвращаются.");
             assertEquals(2, epics.size(), "Неверное количество эпиков.");
-            assertEquals(epic, epics.get(0), "Эпики не совпадают.");
+            assertEquals(epic, epics.getFirst(), "Эпики не совпадают.");
         }
 
     @Test
@@ -77,7 +76,7 @@ public class TaskManagerTest {
         assertEquals("impossible", subTaskToSubTask(subTask),"Подзадача подгружена сама к себе");
         assertNotNull(subTask, "Подзадачи не возвращаются.");
         assertEquals(2, subTasks.size(), "Неверное количество подзадач.");
-        assertEquals(subTask, subTasks.get(0), "Подзадачи не совпадают.");
+        assertEquals(subTask, subTasks.getFirst(), "Подзадачи не совпадают.");
     }
 
     String epicToEpic (Task epic){
@@ -91,8 +90,8 @@ public class TaskManagerTest {
         int id = subTask.getId();
         taskManager.addSubTaskToEpic(subTask, id);
             try {
-                SubTask addedSubTask = (taskManager.getSubtaskFromEpic(id)).get(id);
-            } catch (Exception е){
+                (taskManager.getSubtaskFromEpic(id)).get(id);
+            } catch (Exception e){
                 return "impossible";
             }
         return "possible";
@@ -126,8 +125,5 @@ public class TaskManagerTest {
     @Test
     void getSubtasksList() {
     }
-
-
-
 
 }

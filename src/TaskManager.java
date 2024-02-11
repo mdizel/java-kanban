@@ -65,7 +65,7 @@ public class TaskManager {
 
     public void changeSubTask(SubTask subTask) {                           // заменяем подзадачу
         int id = subTask.getId();
-        if (!getAllSubtask().containsKey(id)) {
+        if (!(getAllSubtask().containsKey(id))) {
             System.out.println("Id " + id + " dont exist");
             return;
         }
@@ -85,7 +85,6 @@ public class TaskManager {
     public Task getTask(int id) {                                         // Получаем задачу по Id
         if (!getTaskAndSubtasks().containsKey(id)) {
             System.out.println("Id " + id + " dont exist");
-            return new Task("none", "none",Status.DONE);
         }
         return tasks.get(id);
     }
@@ -100,7 +99,6 @@ public class TaskManager {
     public SubTask getSubTask(int id) {                                         // Получаем подзадачу по Id
         if (!getTaskAndSubtasks().containsKey(id)) {
             System.out.println("Id " + id + " dont exist");
-            return new SubTask("none", "none", Status.DONE, -1);
         }
         return getAllSubtask().get(id);
     }
