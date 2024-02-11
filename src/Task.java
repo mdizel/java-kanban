@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Task {
     protected String name;
     protected String description;
@@ -42,6 +44,19 @@ public class Task {
 
     public TypeOfTask getTypeOfTask() {
         return typeOfTask;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Task)) return false;
+        Task task = (Task) object;
+        return id == task.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override
