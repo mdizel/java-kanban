@@ -1,10 +1,9 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-
 //Этот класс полностью создан для проверки работы программы.
 public class InputOutput {
-    TaskManager taskManager = new TaskManager();
+    TaskManager taskManager = Managers.getDefault();
+    HistoryManager historyManager = Managers.getDefaultHistory();
     int count = 1;
+
     void print() {
         System.out.println("Список задач " + count);
         System.out.println(taskManager.getTasksList());
@@ -46,7 +45,7 @@ public class InputOutput {
         System.out.println("Замена эпика на подзадачу");
         taskManager.changeSubTask(subTask7);
         System.out.println("Замена задачи на подзадачу");
-        taskManager.changeSubTask(subTask8);
+        taskManager.changeTask(subTask8);
         System.out.println("Замена эпика на задачу");
         taskManager.changeTask(task5);
         System.out.println("Замена подзадачи на задачу");
@@ -54,7 +53,7 @@ public class InputOutput {
         System.out.println("Замена подзадачи на эпик");
         taskManager.changeEpic(epic4);
         System.out.println("Замена задачи на эпик");
-        taskManager.changeEpic(epic5);
+        taskManager.changeTask(epic5);
         System.out.println("________________________________________");
         System.out.println("Добавляем подзадачи к Эпикам 10009 и 10007");
         taskManager.setSubTask(subTask5);
@@ -78,7 +77,24 @@ public class InputOutput {
         System.out.println(taskManager.getEpic(10007));
         System.out.println("Получаем Подзадачу по Id 10008");
         System.out.println(taskManager.getSubTask(10008));
-        System.out.println("________________________________________");
+        System.out.println("_______________555_________________________");
+        System.out.println("Получаем историю");
+        taskManager.getEpic(10004);
+        taskManager.getEpic(10007);
+        taskManager.getSubTask(10006);
+        taskManager.getTask(10002);
+        taskManager.getTask(10002);
+        taskManager.getEpic(10004);
+        taskManager.getEpic(10007);
+        taskManager.getSubTask(10006);
+        taskManager.getTask(10002);
+        taskManager.getTask(10002);
+        taskManager.getTask(10003);
+        System.out.println(taskManager.getHistory());
+        System.out.println("______________5555__________________________");
+        System.out.println("Список из памяти HistoryManager");
+        System.out.println(historyManager.getHistory());
+        System.out.println("Удаляем все");
         taskManager.deleteAllTasks();
         taskManager.deleteAllEpics();
         taskManager.deleteAllSubTasks();
@@ -90,7 +106,7 @@ public class InputOutput {
     Task task2 = new Task("Заготовить дров", "Нужно привезти, напилить, нарубить ", Status.DONE);
     Task task4 = new Task(10001, "Покрасить стены", "Стены красим теперь красный цвет.", Status.DONE);
     Epic epic = new Epic("Поcтроить сарай", "Помещение для хоз нужд", Status.NEW);
-    Epic epic3 = new Epic(10009,"Эпик для замены", "Им мы заменили эпик 10009", Status.DONE);
+    Epic epic3 = new Epic(10009, "Эпик для замены", "Им мы заменили эпик 10009", Status.DONE);
     SubTask subTask = new SubTask("Закупить материалы", "Заказать материалы для строительства сарая",
             Status.IN_PROGRESS, 10004);
     SubTask subTask1 = new SubTask("Договорится с бригадой", "Найти бригаду, обсудить стоимость и сроки",
@@ -107,14 +123,14 @@ public class InputOutput {
     SubTask subTask5 = new SubTask("Привезти доски", "Привезти доски с рынка", Status.NEW, 10009);
     SubTask subTask6 = new SubTask("Просто подзадача к эпику.", "Добавление по id эпика",
             Status.DONE, 10007);
-    SubTask subTask7 = new SubTask(10007,"Ошибочная подзадача для эпика",
+    SubTask subTask7 = new SubTask(10007, "Ошибочная подзадача для эпика",
             "--------", Status.DONE, 10004);
-    SubTask subTask8 = new SubTask(10002,"Ошибочная подзадача для задачи", "-------", Status.DONE,
+    SubTask subTask8 = new SubTask(10002, "Ошибочная подзадача для задачи", "-------", Status.DONE,
             10001);
     Task task5 = new Task(10004, "Ошибочная задача для Эпика", "-----", Status.DONE);
 
-    Task task6 = new Task(10005,"Ошибочная задача для Подзадачи", "-----", Status.DONE);
-    Epic epic4 = new Epic(10006,"Ошибочный Эпик для Подзадачи", "--------", Status.NEW);
-    Epic epic5 = new Epic(10003,"Ошибочный Эпик для Задачи", "--------", Status.NEW);
+    Task task6 = new Task(10005, "Ошибочная задача для Подзадачи", "-----", Status.DONE);
+    Epic epic4 = new Epic(10006, "Ошибочный Эпик для Подзадачи", "--------", Status.NEW);
+    Epic epic5 = new Epic(10003, "Ошибочный Эпик для Задачи", "--------", Status.NEW);
 }
 
