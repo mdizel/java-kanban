@@ -1,30 +1,26 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class InMemoryTaskManager implements TaskManager, HistoryManager {
+public class InMemoryTaskManager implements TaskManager {
     private int id = 10000;
+    final static int MAX_HISTORY_SIZE = 10;
     HashMap<Integer, Task> tasks = new HashMap<>();
     HashMap<Integer, Epic> epics = new HashMap<>();
-    ArrayList<Task> recentlyOpenTasksCache = new ArrayList<>(10);
-    HistoryManager memHisManager = Managers.getDefaultHistory();
+    ArrayList<Task> recentlyOpenTasksCache =new ArrayList<>(10);
+    HistoryManager memHisManager = Managers.historyManagerForTest;
 
-    @Override
-    public void add(Task task){}
-    @Override
+       @Override
     public ArrayList<Task> getHistory(){
         return recentlyOpenTasksCache;
     }
     public void addRecentlyOpenTasks(Task task){
-        memHisManager.add(task);
-        if (recentlyOpenTasksCache == null){
-            recentlyOpenTasksCache = memHisManager.getHistory();
-        }
-        if (recentlyOpenTasksCache.size() < 10){
+           if (recentlyOpenTasksCache.size() < MAX_HISTORY_SIZE){
             recentlyOpenTasksCache.add(task);
         } else {
             recentlyOpenTasksCache.remove(0);
             recentlyOpenTasksCache.add(task);
         }
+        memHisManager.add(task);
     }
 
     public ArrayList<Task> getRecentlyOpenTasks() {

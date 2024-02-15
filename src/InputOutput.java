@@ -1,7 +1,7 @@
 //Этот класс полностью создан для проверки работы программы.
 public class InputOutput {
     TaskManager taskManager = Managers.getDefault();
-    HistoryManager historyManager = Managers.getDefaultHistory();
+    HistoryManager historyManager = Managers.historyManagerForTest;
     int count = 1;
 
     void print() {
@@ -91,7 +91,7 @@ public class InputOutput {
         taskManager.getTask(10002);
         taskManager.getTask(10003);
         System.out.println(taskManager.getHistory());
-        System.out.println("______________5555__________________________");
+        System.out.println("______________7777__________________________");
         System.out.println("Список из памяти HistoryManager");
         System.out.println(historyManager.getHistory());
         System.out.println("Удаляем все");
