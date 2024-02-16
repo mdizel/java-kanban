@@ -1,7 +1,7 @@
 //Этот класс полностью создан для проверки работы программы.
 public class InputOutput {
-    TaskManager taskManager = Managers.getDefault();
-    HistoryManager historyManager = Managers.historyManagerForTest;
+    InMemoryTaskManager taskManager = new InMemoryTaskManager();
+    HistoryManager historyManager = taskManager.memHisManager;
     int count = 1;
 
     void print() {

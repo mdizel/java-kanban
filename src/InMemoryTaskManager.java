@@ -7,7 +7,7 @@ public class InMemoryTaskManager implements TaskManager {
     HashMap<Integer, Task> tasks = new HashMap<>();
     HashMap<Integer, Epic> epics = new HashMap<>();
     ArrayList<Task> recentlyOpenTasksCache =new ArrayList<>(10);
-    HistoryManager memHisManager = Managers.historyManagerForTest;
+    HistoryManager memHisManager = Managers.getDefaultHistory();
 
        @Override
     public ArrayList<Task> getHistory(){
