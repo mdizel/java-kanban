@@ -9,7 +9,7 @@ public class SubTask extends Task {
         typeOfTask = TypeOfTask.SUBTASK;
     }
 
-    public SubTask(int id, String name, String description, Status status, int parentsId){
+    public SubTask(int id, String name, String description, Status status, int parentsId) {
         super(id, name, description, status);
         this.parentsId = parentsId;
         typeOfTask = TypeOfTask.SUBTASK;
@@ -26,10 +26,10 @@ public class SubTask extends Task {
     @Override
     public String toString() {
         return typeOfTask +
-                "    Код: " + id + ",\n" +
-                "    Подзадача эпика N " + parentsId + ",\n" +
-                "    Название: " + name + ",\n" +
-                "    Описание: " + description + ",\n" +
-                "    Статус: " + status + "\n";
+                "  Код: " + id +
+                "  К эпику N " + parentsId +
+                "  Название: " + name +
+                "  Описание: " + description +
+                "  Статус: " + status + "\n";
     }
 }

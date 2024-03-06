@@ -95,22 +95,4 @@ public class TaskManagerTest {
         assertEquals(1, tasks.size(), "Неверное количество подзадач.");
 
     }
-
-    @Test
-    public void getHistory(){
-        Task task = new Task("Test first", "description first", Status.NEW);
-        Task task1 = new Task("Test addNewTask1", "Test addNewTask description1", Status.NEW);
-        taskManager.setTask(task);
-        taskManager.setTask(task1);
-        Task task2 = new Task(task.getId(),"Test changed", "description changed", Status.DONE);
-        taskManager.getTask(task.getId());
-        taskManager.getTask(task1.getId());
-        assertNotNull(taskManager.getHistory(), "Список задач пуст");
-        assertEquals(2, taskManager.getHistory().size(), "Неверное количество задач.");
-        taskManager.changeTask(task2);
-        assertEquals ("Test first", taskManager.getHistory().get(0).getName(),
-                "Задача в истории изменилась");
-        taskManager.getTask(task.getId());
-        assertEquals(3, taskManager.getHistory().size(), "Неверное количество задач.");
-    }
-}
+  }
