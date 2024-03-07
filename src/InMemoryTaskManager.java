@@ -104,32 +104,38 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTask(int id) {                                         // Получаем задачу по Id
-        if (!tasks.containsKey(id)) {
+        if (tasks.containsKey(id)) {
+            Task task = tasks.get(id);
+            addRecentlyOpenTasks(task);
+            return task;
+        } else {
             System.out.println("Id " + id + " dont exist");
+            return null;
         }
-        Task task = tasks.get(id);
-        addRecentlyOpenTasks(task);
-        return task;
     }
 
     @Override
     public Epic getEpic(int id) {                                         // Получаем Эпик по Id
-        if (!epics.containsKey(id)) {
+        if (epics.containsKey(id)) {
+            Task epic = epics.get(id);
+            addRecentlyOpenTasks(epic);
+            return epics.get(id);
+        } else {
             System.out.println("Id " + id + " dont exist");
+            return null;
         }
-        Task epic = epics.get(id);
-        addRecentlyOpenTasks(epic);
-        return epics.get(id);
     }
 
     @Override
     public SubTask getSubTask(int id) {                                         // Получаем подзадачу по Id
-        if (!getAllSubtask().containsKey(id)) {
+        if (getAllSubtask().containsKey(id)) {
+            Task subTask = getAllSubtask().get(id);
+            addRecentlyOpenTasks(subTask);
+            return getAllSubtask().get(id);
+        } else {
             System.out.println("Id " + id + " dont exist");
+            return null;
         }
-        Task subTask = getAllSubtask().get(id);
-        addRecentlyOpenTasks(subTask);
-        return getAllSubtask().get(id);
     }
 
     @Override

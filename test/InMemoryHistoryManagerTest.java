@@ -25,20 +25,15 @@ class InMemoryHistoryManagerTest {
         assertNotEquals(0, recentlyOpenTasks.size(), "Список задач пуст");
         assertEquals(2, recentlyOpenTasks.size(), "Неверное количество задач.");
         taskManager.changeTask(task2);
-        assertEquals("Test first", recentlyOpenTasks.get(0).getName(),
+        assertEquals("Test first", recentlyOpenTasks.getFirst().getName(),
                 "Задача в истории изменилась");
         taskManager.setTask(task3);
         taskManager.getTask(task3.getId());
         assertEquals(3, historyManager.getHistory().size(), "Неверное количество задач.");
         taskManager.deleteTask(task.getId());
         assertEquals(2, historyManager.getHistory().size(), "Удаленная задача осталась в истории");
-        Throwable exception = assertThrows(IndexOutOfBoundsException.class,
-                () -> {
-                    historyManager.getHistory().get(task.getId());
-                });
-        String expectedMessage = "out of bounds";
-        String actualMessage = exception.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertFalse(historyManager.getHistory().contains(task), "Удаленная задача осталась в истории");
+
     }
 
     @Test

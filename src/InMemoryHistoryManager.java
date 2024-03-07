@@ -5,7 +5,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     HashMap<Integer, Node<Task>> idLink = new HashMap<>();
     Node<Task> first;
     Node<Task> last;
-    static int size = 0;
+    int size = 0;
 
     private void linkLast(Task task) {
         Node<Task> oldLast = last;
@@ -25,21 +25,17 @@ public class InMemoryHistoryManager implements HistoryManager {
         return size;
     }
 
-    private ArrayList<Task> getTasks(Node<Task> head) {
+    private ArrayList<Task> getTasks(Node<Task> first) {
         ArrayList<Task> recentlyOpenTasks = new ArrayList<>();
-        if (head != null) {
-            recentlyOpenTasks.add(head.data);
-            Node<Task> node = head.next;
-            while (node != null) {
-                recentlyOpenTasks.add(node.data);
-                node = node.next;
-            }
+        Node<Task> node = first;
+        while (node != null) {
+            recentlyOpenTasks.add(node.data);
+            node = node.next;
         }
         return recentlyOpenTasks;
     }
 
     private void removeNode(Node<Task> node) {
-        node.data = null;
         node.next = null;
         node.prev = null;
         size--;
@@ -52,18 +48,24 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
         Node<Task> oldNode = idLink.get(id);
         if (oldNode.next == null && oldNode.prev == null) {
+            removeNode(oldNode);
+            idLink.remove(id);
         } else if (oldNode.next == null) {
             oldNode.prev.next = null;
             last = oldNode.prev;
+            removeNode(oldNode);
+            idLink.remove(id);
         } else if (oldNode.prev == null) {
             oldNode.next.prev = null;
             first = oldNode.next;
+            removeNode(oldNode);
+            idLink.remove(id);
         } else {
             oldNode.prev.next = oldNode.next;
             oldNode.next.prev = oldNode.prev;
+            removeNode(oldNode);
+            idLink.remove(id);
         }
-        removeNode(oldNode);
-        idLink.remove(id);
     }
 
     @Override
