@@ -25,7 +25,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         return size;
     }
 
-    private ArrayList<Task> getTasks(Node<Task> first) {
+    private ArrayList<Task> getTasks() {
         ArrayList<Task> recentlyOpenTasks = new ArrayList<>();
         Node<Task> node = first;
         while (node != null) {
@@ -48,29 +48,25 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
         Node<Task> oldNode = idLink.get(id);
         if (oldNode.next == null && oldNode.prev == null) {
-            removeNode(oldNode);
-            idLink.remove(id);
+            first = null;
+            last = null;
         } else if (oldNode.next == null) {
             oldNode.prev.next = null;
             last = oldNode.prev;
-            removeNode(oldNode);
-            idLink.remove(id);
         } else if (oldNode.prev == null) {
             oldNode.next.prev = null;
             first = oldNode.next;
-            removeNode(oldNode);
-            idLink.remove(id);
         } else {
             oldNode.prev.next = oldNode.next;
             oldNode.next.prev = oldNode.prev;
-            removeNode(oldNode);
-            idLink.remove(id);
         }
+        removeNode(oldNode);
+        idLink.remove(id);
     }
 
     @Override
     public ArrayList<Task> getHistory() {
-        return getTasks(first);
+        return getTasks();
     }
 
     @Override
