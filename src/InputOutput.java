@@ -8,8 +8,8 @@ public class InputOutput {
     String fileName = Managers.fileName;
     File file = new File(fileName);
     Scanner scanner = new Scanner(System.in);
-    TaskManager taskManager = FileBackedTaskManager.loadFromFile(file);
-    HistoryManager historyManager = taskManager.getMemHisManager();
+    TaskManager taskManager;
+    HistoryManager historyManager;
     int count = 1;
 
     TaskManager managerChoose() {
@@ -49,12 +49,11 @@ public class InputOutput {
         count++;
     }
 
-    public void test() {   // Метод для теста программы
-        //TaskManager taskManager = new InMemoryTaskManager();
-       // taskManager = managerChoose();
-       // historyManager = taskManager.getMemHisManager();
-        //System.out.println("Список задач после загрузки из файла:");
-        //print();
+    public void test() {                           // Метод для теста программы
+        taskManager = managerChoose();
+         historyManager = taskManager.getMemHisManager();
+         System.out.println("Список задач после загрузки из файла:");
+          print();
         taskManager.setTask(task);
         taskManager.setTask(task1);
         taskManager.setTask(task2);
