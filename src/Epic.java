@@ -25,11 +25,6 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return typeOfTask +
-                "    Код: ***" + id + ",\n" +
-                "    Название: " + name + ",\n" +
-                "    Описание: " + description + ",\n" +
-                "    Статус: " + status +
-                "          " + subtacks + "*КОНЕЦ ЭПИКА*\n";
+        return String.format("%d;%s;%s;%s;%s\n", id, typeOfTask, name, status, description);
     }
 }

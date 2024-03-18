@@ -25,11 +25,6 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return typeOfTask +
-                "  Код: " + id +
-                "  К эпику N " + parentsId +
-                "  Название: " + name +
-                "  Описание: " + description +
-                "  Статус: " + status + "\n";
+        return String.format("%d;%s;%s;%s;%s;%s\n", id, typeOfTask, name, status, description, parentsId);
     }
 }

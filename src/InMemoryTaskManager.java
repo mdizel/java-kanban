@@ -1,11 +1,16 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int id = 10000;
+    protected int id = 10000;
     HashMap<Integer, Task> tasks = new HashMap<>();
     HashMap<Integer, Epic> epics = new HashMap<>();
     HistoryManager memHisManager = Managers.getDefaultHistory();
+
+    public HistoryManager getMemHisManager() {
+        return memHisManager;
+    }
 
     public void addRecentlyOpenTasks(Task task) {
         memHisManager.add(task);
@@ -41,20 +46,17 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public ArrayList<Epic> getEpicsList() {                      //Выводим все эпики списком
-        ArrayList<Epic> epicsList = new ArrayList<>(epics.values());
-        return epicsList;
+        return new ArrayList<>(epics.values());
     }
 
     @Override
     public ArrayList<Task> getTasksList() {                     //Выводим все задачи списком
-        ArrayList<Task> tasksList = new ArrayList<>(tasks.values());
-        return tasksList;
+        return new ArrayList<>(tasks.values());
     }
 
     @Override
     public ArrayList<SubTask> getSubtasksList() {                      //Выводим все подзадачи списком
-        ArrayList<SubTask> subtasksList = new ArrayList<>(getAllSubtask().values());
-        return subtasksList;
+        return new ArrayList<>(getAllSubtask().values());
     }
 
     @Override
@@ -97,10 +99,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public ArrayList<SubTask> getSubtaskFromEpicList(int epicId) {          //Подзадачи отдельного Эпика списком
         HashMap<Integer, SubTask> subtasks = getSubtaskFromEpic(epicId);
-        ArrayList<SubTask> subtaskFromEpicList = new ArrayList<>(subtasks.values());
-        return subtaskFromEpicList;
+        return new ArrayList<>(subtasks.values());
     }
-
 
     @Override
     public Task getTask(int id) {                                         // Получаем задачу по Id
@@ -252,13 +252,21 @@ public class InMemoryTaskManager implements TaskManager {
         return epics;
     }
 
+    public void setTasks(HashMap<Integer, Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public void setEpics(HashMap<Integer, Epic> epics) {
+        this.epics = epics;
+    }
+
     public HashMap<Integer, SubTask> getSubtaskFromEpic(int parentsId) {
         Epic epic = epics.get(parentsId);                                 //используется упрошения обращения к позадачам
         return epic.getSubtacks();
     }
 
-    private HashMap<Integer, Task> getTaskAndSubtasks() {
-        HashMap<Integer, Task> taskAndSubtasks = new HashMap<>();
+    public LinkedHashMap<Integer, Task> getTaskAndSubtasks() {
+        LinkedHashMap<Integer, Task> taskAndSubtasks = new LinkedHashMap<>();
         taskAndSubtasks.putAll(tasks);
         taskAndSubtasks.putAll(epics);
         taskAndSubtasks.putAll(getAllSubtask());

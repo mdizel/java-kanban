@@ -1,10 +1,40 @@
+import java.io.File;
+import java.util.Scanner;
+
 //Этот класс полностью создан для проверки работы программы.
 public class InputOutput {
-    InMemoryTaskManager taskManager = new InMemoryTaskManager();
-    HistoryManager historyManager = taskManager.memHisManager;
+
+
+    String fileName = Managers.fileName;
+    File file = new File(fileName);
+    Scanner scanner = new Scanner(System.in);
+    TaskManager taskManager = FileBackedTaskManager.loadFromFile(file);
+    HistoryManager historyManager = taskManager.getMemHisManager();
     int count = 1;
 
+    TaskManager managerChoose() {
+        TaskManager manager = FileBackedTaskManager.loadFromFile(file);
+        System.out.println("Выберите менеджера");
+        System.out.println("1 — Менеджер в памяти");
+        System.out.println("2 — Файловый менеджер");
+        System.out.println("3 — Файловый менеджер с предварительной загрузкой из файла");
+        String command = scanner.next();
+        switch (command) {
+            case "1":
+                manager = new InMemoryTaskManager();
+                break;
+            case "2":
+                manager = Managers.getFileManager();
+                break;
+            case "3":
+                manager = FileBackedTaskManager.loadFromFile(file);
+                break;
+        }
+        return manager;
+    }
+
     void print() {
+
         System.out.println("Список задач " + count);
         System.out.println(taskManager.getTasksList());
         System.out.println("________________________________________");
@@ -14,10 +44,17 @@ public class InputOutput {
         System.out.println("Список подзадач");
         System.out.println(taskManager.getSubtasksList());
         System.out.println("________________________________________");
+        System.out.println("Сборный список задач");
+        System.out.println(taskManager.getTaskAndSubtasks());
         count++;
     }
 
-    public void test() {                   // Метод для теста программы
+    public void test() {   // Метод для теста программы
+        //TaskManager taskManager = new InMemoryTaskManager();
+       // taskManager = managerChoose();
+       // historyManager = taskManager.getMemHisManager();
+        //System.out.println("Список задач после загрузки из файла:");
+        //print();
         taskManager.setTask(task);
         taskManager.setTask(task1);
         taskManager.setTask(task2);
@@ -92,11 +129,6 @@ public class InputOutput {
         taskManager.getTask(10003);
         System.out.println("Список из памяти HistoryManager");
         System.out.println(historyManager.getHistory());
-        System.out.println("Удаляем все");
-        taskManager.deleteAllTasks();
-        taskManager.deleteAllEpics();
-        taskManager.deleteAllSubTasks();
-        print();
     }
 
     Task task = new Task("Покрасить стены", "Нужно покрасить стены в коридоре в синий цвет.", Status.NEW);
