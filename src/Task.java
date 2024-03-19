@@ -62,7 +62,7 @@ public class Task {
     @Override
     public String toString() {
         return typeOfTask +
-                "    Код: " + id + ",\n" +
+                "    Код:** " + id + ",\n" +
                 "    Название: " + name + ",\n" +
                 "    Описание: " + description + ",\n" +
                 "    Статус: " + status + "\n";

@@ -44,8 +44,6 @@ public interface TaskManager {
 
     void checkStatus(int parentsId);
 
-    ArrayList<Task> getHistory();
-
     HashMap<Integer, SubTask> getAllSubtask();
 
     HashMap<Integer, SubTask> getSubtaskFromEpic(int parentsId);
