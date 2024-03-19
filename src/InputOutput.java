@@ -51,9 +51,9 @@ public class InputOutput {
 
     public void test() {                           // Метод для теста программы
         taskManager = managerChoose();
-         historyManager = taskManager.getMemHisManager();
-         System.out.println("Список задач после загрузки из файла:");
-          print();
+        historyManager = taskManager.getMemHisManager();
+        System.out.println("Список задач после загрузки из файла:");
+        print();
         taskManager.setTask(task);
         taskManager.setTask(task1);
         taskManager.setTask(task2);
@@ -63,6 +63,8 @@ public class InputOutput {
         taskManager.setEpic(epic1);
         taskManager.setSubTask(subTask2);
         taskManager.setEpic(epic2);
+        System.out.println("________________________________________");
+        System.out.println("Список после добавления задач");
         print();
         System.out.println("Получаем, задачу, эпик и подзадачу");
         System.out.println(taskManager.getTask(10001));

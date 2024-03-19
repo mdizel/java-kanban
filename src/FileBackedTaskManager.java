@@ -51,15 +51,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String fileName = file.toString();
         FileBackedTaskManager fileManagerloaded = new FileBackedTaskManager(fileName);
         Charset charset = Charset.forName("windows-1251");
-                try (FileReader reader = new FileReader(fileName, charset);
-                     BufferedReader bufReader = new BufferedReader(reader)) {
-                    HashMap<Integer, Task> tasks = new HashMap<>();
+        try (FileReader reader = new FileReader(fileName, charset);
+             BufferedReader bufReader = new BufferedReader(reader)) {
+            HashMap<Integer, Task> tasks = new HashMap<>();
             HashMap<Integer, Epic> epics = new HashMap<>();
             HistoryManager memHisManager = fileManagerloaded.getMemHisManager();
             boolean isHistoryBegin = false;
-           int count = 0;
+            int count = 0;
             while (bufReader.ready()) {
-                 String line = bufReader.readLine();
+                String line = bufReader.readLine();
                 if (count == 0) {
                     count++;
                     continue;
@@ -77,14 +77,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         tasks.put(task.getId(), task);
                         fileManagerloaded.setTasks(tasks);
                     } else {
-                        int id = task.getId();
                         SubTask subTask = (SubTask) task;
-                        int parentsId = subTask.getParentsId();
-                        Epic epic = epics.get(parentsId);
-                        subTask.setParentsId(parentsId);
-                        HashMap<Integer, SubTask> subtasks = epic.getSubtacks();
-                        subtasks.put(id, subTask);
-                        epic.setSubtacks(subtasks);
+                        int parentsId = ((SubTask) task).getParentsId();
+                        fileManagerloaded.addSubTaskToEpic(subTask, parentsId);
                     }
                 } else {
                     int id = Integer.parseInt(line);
@@ -99,8 +94,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return fileManagerloaded;
     }
 
-    void setLastId(){
-      this.id =  Collections.max(getTaskAndSubtasks().keySet());
+    void setLastId() {
+        this.id = Collections.max(getTaskAndSubtasks().keySet());
     }
 
     @Override

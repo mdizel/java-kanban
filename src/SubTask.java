@@ -1,7 +1,5 @@
 public class SubTask extends Task {
-
     private int parentsId;
-
 
     public SubTask(String name, String description, Status status, int parentsId) {
         super(name, description, status);

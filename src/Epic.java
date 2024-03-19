@@ -21,10 +21,4 @@ public class Epic extends Task {
     public void setSubtacks(HashMap<Integer, SubTask> subtacks) {
         this.subtacks = subtacks;
     }
-
-
-    @Override
-    public String toString() {
-        return String.format("%d;%s;%s;%s;%s\n", id, typeOfTask, name, status, description);
-    }
 }
