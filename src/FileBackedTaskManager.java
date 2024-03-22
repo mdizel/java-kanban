@@ -1,25 +1,25 @@
 import java.io.*;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     String fileName;
+    static Charset charset = Charset.forName("windows-1251");
+    String TITLE = "id;type;name;status;description;epic\n";
 
     public FileBackedTaskManager(String fileName) {
         this.fileName = fileName;
     }
 
-    public void save() {
-        Charset charset = Charset.forName("windows-1251");
+    void save() {                               //пока не могу тестировать приватные методы оставил default-package
         try (FileWriter writer = new FileWriter(fileName, charset);
              BufferedWriter bufWriter = new BufferedWriter(writer)) {
             LinkedHashMap<Integer, Task> allTaskAndSubtasks = getTaskAndSubtasks();
-            HistoryManager historyManager = getMemHisManager();
-            ArrayList<Task> history = historyManager.getHistory();
-            bufWriter.write("id;type;name;status;description;epic\n");
+            List<Task> history = memHisManager.getHistory();
+            bufWriter.write(TITLE);
             for (Integer id : allTaskAndSubtasks.keySet()) {
                 String task = allTaskAndSubtasks.get(id).toString();
                 bufWriter.write(task);
@@ -29,12 +29,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 bufWriter.write(task.getId() + "\n");
             }
         } catch (IOException e) {
-            System.out.println("Произошла ошибка во время записи файла.");
+            throw new ManagerSaveException("Произошла ошибка во время записи в файл.", e);
         }
     }
 
-    public static Task taskFromString(String value) {
-        String[] splTask = value.split(";");
+    static Task taskFromString(String value) {   //пока не могу тестировать приватные методы оставил default-package
+        String[] splTask = value.split(",");
         int id = Integer.parseInt(splTask[0]);
         Status status = Status.valueOf(splTask[3]);
         TypeOfTask type = TypeOfTask.valueOf(splTask[1]);
@@ -47,15 +47,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return new Task(id, splTask[2], splTask[4], status);
     }
 
-    static FileBackedTaskManager loadFromFile(File file) {
+    public static FileBackedTaskManager loadFromFile(File file) {
         String fileName = file.toString();
         FileBackedTaskManager fileManagerloaded = new FileBackedTaskManager(fileName);
-        Charset charset = Charset.forName("windows-1251");
         try (FileReader reader = new FileReader(fileName, charset);
              BufferedReader bufReader = new BufferedReader(reader)) {
-            HashMap<Integer, Task> tasks = new HashMap<>();
-            HashMap<Integer, Epic> epics = new HashMap<>();
-            HistoryManager memHisManager = fileManagerloaded.getMemHisManager();
+            HashMap<Integer, Task> tasks = fileManagerloaded.tasks;
+            HashMap<Integer, Epic> epics = fileManagerloaded.epics;
+            HistoryManager memHisManager = fileManagerloaded.memHisManager;
             boolean isHistoryBegin = false;
             int count = 0;
             while (bufReader.ready()) {
@@ -72,10 +71,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     Task task = taskFromString(line);
                     if (task.getTypeOfTask() == TypeOfTask.EPIC) {
                         epics.put(task.getId(), (Epic) task);
-                        fileManagerloaded.setEpics(epics);
                     } else if (task.getTypeOfTask() == TypeOfTask.TASK) {
                         tasks.put(task.getId(), task);
-                        fileManagerloaded.setTasks(tasks);
                     } else {
                         SubTask subTask = (SubTask) task;
                         int parentsId = ((SubTask) task).getParentsId();
@@ -94,7 +91,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return fileManagerloaded;
     }
 
-    void setLastId() {
+    private void setLastId() {
         this.id = Collections.max(getTaskAndSubtasks().keySet());
     }
 

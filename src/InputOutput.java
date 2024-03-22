@@ -9,32 +9,24 @@ public class InputOutput {
     File file = new File(fileName);
     Scanner scanner = new Scanner(System.in);
     TaskManager taskManager;
-    HistoryManager historyManager;
     int count = 1;
 
     TaskManager managerChoose() {
-        TaskManager manager = FileBackedTaskManager.loadFromFile(file);
+        TaskManager manager;
         System.out.println("Выберите менеджера");
         System.out.println("1 — Менеджер в памяти");
         System.out.println("2 — Файловый менеджер");
         System.out.println("3 — Файловый менеджер с предварительной загрузкой из файла");
         String command = scanner.next();
-        switch (command) {
-            case "1":
-                manager = new InMemoryTaskManager();
-                break;
-            case "2":
-                manager = Managers.getFileManager();
-                break;
-            case "3":
-                manager = FileBackedTaskManager.loadFromFile(file);
-                break;
-        }
+        manager = switch (command) {
+            case "2" -> Managers.getFileManager();
+            case "3" -> FileBackedTaskManager.loadFromFile(file);
+            default -> new InMemoryTaskManager();
+        };
         return manager;
     }
 
     void print() {
-
         System.out.println("Список задач " + count);
         System.out.println(taskManager.getTasksList());
         System.out.println("________________________________________");
@@ -51,9 +43,11 @@ public class InputOutput {
 
     public void test() {                           // Метод для теста программы
         taskManager = managerChoose();
-        historyManager = taskManager.getMemHisManager();
         System.out.println("Список задач после загрузки из файла:");
         print();
+        System.out.println("История после загрузки из файла:");
+        System.out.println(taskManager.getHistory());
+        System.out.println("________________________________________");
         taskManager.setTask(task);
         taskManager.setTask(task1);
         taskManager.setTask(task2);
@@ -129,7 +123,7 @@ public class InputOutput {
         taskManager.getTask(10002);
         taskManager.getTask(10003);
         System.out.println("Список из памяти HistoryManager");
-        System.out.println(historyManager.getHistory());
+        System.out.println(taskManager.getHistory());
     }
 
     Task task = new Task("Покрасить стены", "Нужно покрасить стены в коридоре в синий цвет.", Status.NEW);
@@ -140,16 +134,16 @@ public class InputOutput {
     Epic epic3 = new Epic(10009, "Эпик для замены", "Им мы заменили эпик 10009", Status.DONE);
     SubTask subTask = new SubTask("Закупить материалы", "Заказать материалы для строительства сарая",
             Status.IN_PROGRESS, 10004);
-    SubTask subTask1 = new SubTask("Договорится с бригадой", "Найти бригаду, обсудить стоимость и сроки",
+    SubTask subTask1 = new SubTask("Договорится с бригадой", "Найти бригаду",
             Status.NEW, 10004);
     Epic epic1 = new Epic("Сделать ремонт в комнате", "Косметический ремонт в комнате на втором этаже",
             Status.NEW);
-    SubTask subTask2 = new SubTask("Выбрать обои", "Обдумать цветовую гамму, купить обои и клей ",
+    SubTask subTask2 = new SubTask("Выбрать обои", "Обдумать цветовую гамму купить обои и клей ",
             Status.NEW, 10007);
     Epic epic2 = new Epic("Перебрать мотор в тракторе", "Полная переборка с расточкой", Status.DONE);
     SubTask subTask3 = new SubTask(10005, "Проточить коленвал", "Отвезти коленвал в расточку",
             Status.NEW, 10004);
-    SubTask subTask4 = new SubTask(10006, "Залить фундамент", "Заказать бетон, вызвать бетоннасос",
+    SubTask subTask4 = new SubTask(10006, "Залить фундамент", "Заказать бетон вызвать бетоннасос",
             Status.NEW, 10004);
     SubTask subTask5 = new SubTask("Привезти доски", "Привезти доски с рынка", Status.NEW, 10009);
     SubTask subTask6 = new SubTask("Просто подзадача к эпику.", "Добавление по id эпика",

@@ -4,12 +4,13 @@ import java.util.LinkedHashMap;
 
 public class InMemoryTaskManager implements TaskManager {
     protected int id = 10000;
-    HashMap<Integer, Task> tasks = new HashMap<>();
-    HashMap<Integer, Epic> epics = new HashMap<>();
-    HistoryManager memHisManager = Managers.getDefaultHistory();
+    protected HashMap<Integer, Task> tasks = new HashMap<>();
+    protected HashMap<Integer, Epic> epics = new HashMap<>();
+    protected HistoryManager memHisManager = Managers.getDefaultHistory();
 
-    public HistoryManager getMemHisManager() {
-        return memHisManager;
+    public ArrayList<Task> getHistory() {
+
+        return memHisManager.getHistory();
     }
 
     public void addRecentlyOpenTasks(Task task) {
@@ -250,14 +251,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     public HashMap<Integer, Epic> getEpics() {
         return epics;
-    }
-
-    public void setTasks(HashMap<Integer, Task> tasks) {
-        this.tasks = tasks;
-    }
-
-    public void setEpics(HashMap<Integer, Epic> epics) {
-        this.epics = epics;
     }
 
     public HashMap<Integer, SubTask> getSubtaskFromEpic(int parentsId) {

@@ -5,8 +5,6 @@ import java.util.LinkedHashMap;
 public interface TaskManager {
     int createId();
 
-    HistoryManager getMemHisManager();
-
     void setTask(Task task);
 
     void setEpic(Epic epic);
@@ -54,5 +52,7 @@ public interface TaskManager {
     void addSubTaskToEpic(SubTask subtask, int parentsId);
 
     LinkedHashMap<Integer, Task> getTaskAndSubtasks();
+
+    ArrayList<Task> getHistory();
 }
 

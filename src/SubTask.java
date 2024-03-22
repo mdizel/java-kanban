@@ -23,6 +23,6 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return String.format("%d;%s;%s;%s;%s;%s\n", id, typeOfTask, name, status, description, parentsId);
+        return String.format("%d,%s,%s,%s,%s,%s\n", id, typeOfTask, name, status, description, parentsId);
     }
 }
