@@ -50,8 +50,7 @@ public class Task {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if (!(object instanceof Task)) return false;
-        Task task = (Task) object;
+        if (!(object instanceof Task task)) return false;
         return id == task.id;
     }
 

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
     protected int id = 10000;
@@ -8,7 +9,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected HashMap<Integer, Epic> epics = new HashMap<>();
     protected HistoryManager memHisManager = Managers.getDefaultHistory();
 
-    public ArrayList<Task> getHistory() {
+    public List<Task> getHistory() {
 
         return memHisManager.getHistory();
     }

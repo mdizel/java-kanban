@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FileBackedTaskManagerTest {
-    public static Path path = Paths.get("D:", "projectIdea", "files", "test.csv");
+    public static Path path = Paths.get("test.csv");
     public static String fileName = String.valueOf(path);
     File file = new File(fileName);
     FileBackedTaskManager fileManager = new FileBackedTaskManager(fileName);
@@ -23,7 +23,6 @@ class FileBackedTaskManagerTest {
         fileManager.setTask(epic);
         fileManager.setTask(task2);
         assertEquals(3, fileManager.getTaskAndSubtasks().size(), "Неверное количество задач.");
-        fileManager.save();
         assertTrue(Files.exists(path), "Файл не создан");
     }
 

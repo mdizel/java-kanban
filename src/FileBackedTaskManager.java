@@ -7,15 +7,15 @@ import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     String fileName;
-    static Charset charset = Charset.forName("windows-1251");
-    String TITLE = "id;type;name;status;description;epic\n";
+    private static final Charset CHARSET = Charset.forName("windows-1251");
+    private static final String TITLE = "id,type,name,status,description,epic\n";
 
     public FileBackedTaskManager(String fileName) {
         this.fileName = fileName;
     }
 
-    void save() {                               //пока не могу тестировать приватные методы оставил default-package
-        try (FileWriter writer = new FileWriter(fileName, charset);
+    private void save() {
+        try (FileWriter writer = new FileWriter(fileName, CHARSET);
              BufferedWriter bufWriter = new BufferedWriter(writer)) {
             LinkedHashMap<Integer, Task> allTaskAndSubtasks = getTaskAndSubtasks();
             List<Task> history = memHisManager.getHistory();
@@ -50,10 +50,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public static FileBackedTaskManager loadFromFile(File file) {
         String fileName = file.toString();
         FileBackedTaskManager fileManagerloaded = new FileBackedTaskManager(fileName);
-        try (FileReader reader = new FileReader(fileName, charset);
+        try (FileReader reader = new FileReader(fileName, CHARSET);
              BufferedReader bufReader = new BufferedReader(reader)) {
-            HashMap<Integer, Task> tasks = fileManagerloaded.tasks;
-            HashMap<Integer, Epic> epics = fileManagerloaded.epics;
+            HashMap<Integer, Task> tasks = fileManagerloaded.tasks;        //метод статический поля класса нет
+            HashMap<Integer, Epic> epics = fileManagerloaded.epics;        //напрямую не выходит обратиться
             HistoryManager memHisManager = fileManagerloaded.memHisManager;
             boolean isHistoryBegin = false;
             int count = 0;
