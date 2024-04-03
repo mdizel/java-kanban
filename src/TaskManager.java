@@ -1,7 +1,6 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public interface TaskManager {
     int createId();
@@ -45,6 +44,9 @@ public interface TaskManager {
     void deleteSubTask(int id);
 
     void checkStatus(int parentsId);
+    void checkDuration(int parentsId);
+
+    void checkStartTime(int parentsId);
 
     HashMap<Integer, SubTask> getAllSubtask();
 
@@ -55,5 +57,7 @@ public interface TaskManager {
     LinkedHashMap<Integer, Task> getTaskAndSubtasks();
 
     List<Task> getHistory();
+
+    Set<Task> getPrioritizedTasks(Map<Integer, Task> taskAndSubTasks);
 }
 

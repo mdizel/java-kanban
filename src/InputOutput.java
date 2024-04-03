@@ -1,4 +1,6 @@
 import java.io.File;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 //Этот класс полностью создан для проверки работы программы.
@@ -57,6 +59,15 @@ public class InputOutput {
         taskManager.setEpic(epic1);
         taskManager.setSubTask(subTask2);
         taskManager.setEpic(epic2);
+        taskManager.setTask(taskTime);
+        taskManager.setTask(taskTime2);
+        taskManager.setTask(taskTime3);
+        taskManager.setEpic(epicTime);
+        taskManager.setSubTask(subTaskTime);
+        taskManager.setSubTask(subTaskTime2);
+        taskManager.setSubTask(subTaskTime3);
+        taskManager.setSubTask(subTaskTime4);
+        taskManager.setTask(taskTime4);
         System.out.println("________________________________________");
         System.out.println("Список после добавления задач");
         print();
@@ -124,11 +135,12 @@ public class InputOutput {
         taskManager.getTask(10003);
         System.out.println("Список из памяти HistoryManager");
         System.out.println(taskManager.getHistory());
+        System.out.println(taskManager.getPrioritizedTasks(taskManager.getTaskAndSubtasks()));
     }
 
     Task task = new Task("Покрасить стены", "Нужно покрасить стены в коридоре в синий цвет.", Status.NEW);
     Task task1 = new Task("Прополоть картошку", "Огородные работы", Status.IN_PROGRESS);
-    Task task2 = new Task("Заготовить дров", "Нужно привезти, напилить, нарубить ", Status.DONE);
+    Task task2 = new Task("Заготовить дров", "Нужно привезти напилить нарубить ", Status.DONE);
     Task task4 = new Task(10001, "Покрасить стены", "Стены красим теперь красный цвет.", Status.DONE);
     Epic epic = new Epic("Поcтроить сарай", "Помещение для хоз нужд", Status.NEW);
     Epic epic3 = new Epic(10009, "Эпик для замены", "Им мы заменили эпик 10009", Status.DONE);
@@ -155,7 +167,26 @@ public class InputOutput {
     Task task5 = new Task(10004, "Ошибочная задача для Эпика", "-----", Status.DONE);
 
     Task task6 = new Task(10005, "Ошибочная задача для Подзадачи", "-----", Status.DONE);
+
     Epic epic4 = new Epic(10006, "Ошибочный Эпик для Подзадачи", "--------", Status.NEW);
     Epic epic5 = new Epic(10003, "Ошибочный Эпик для Задачи", "--------", Status.NEW);
+    Task taskTime = new Task( "Задача со временем 1", "----1", Status.NEW, Duration.ofMinutes(120),
+            LocalDateTime.parse("2024-04-01T08:00:00"));
+    Task taskTime2 = new Task( "Задача со временем 2", "----2", Status.NEW, Duration.ofMinutes(180),
+            LocalDateTime.parse("2024-04-01T11:00:00"));
+    Task taskTime3 = new Task( "Задача со временем 3", "----3", Status.NEW, Duration.ofMinutes(320),
+            LocalDateTime.parse("2024-04-01T07:00:00"));
+    Task taskTime4 = new Task( "Задача со временем наложение", "----4", Status.NEW, Duration.ofMinutes(240),
+            LocalDateTime.parse("2024-04-01T08:00:00"));
+    Epic epicTime = new Epic( "Эпик со временем 1", "----э1", Status.NEW, Duration.ofMinutes(20),
+            LocalDateTime.parse("2024-04-01T14:10:00"));
+    SubTask subTaskTime = new SubTask("Подзадача к эпику 10007 со временем1.", "______сб1",
+            Status.IN_PROGRESS, 10007, Duration.ofMinutes(60),LocalDateTime.parse("2024-04-01T18:15:00"));
+    SubTask subTaskTime2 = new SubTask("Подзадача к эпику 10007 со временем2.", "______сб2",
+            Status.IN_PROGRESS, 10007, Duration.ofMinutes(240),LocalDateTime.parse("2024-04-02T21:55:00"));
+    SubTask subTaskTime3 = new SubTask("Подзадача к эпику epicTime со временем3.", "______сб3",
+            Status.IN_PROGRESS, 10013, Duration.ofMinutes(311),LocalDateTime.parse("2024-04-03T07:20:00"));
+    SubTask subTaskTime4 = new SubTask("Подзадача к эпику epicTime со временем3.2.", "______сб3",
+            Status.IN_PROGRESS, 10013, Duration.ofMinutes(20),LocalDateTime.parse("2024-05-03T07:20:00"));
 }
 
