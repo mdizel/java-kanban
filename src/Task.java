@@ -13,6 +13,7 @@ public class Task {
         this.status = status;
         typeOfTask = TypeOfTask.TASK;
     }
+
     public Task(int id, String name, String description, Status status) {
         this.id = id;
         this.name = name;
@@ -49,8 +50,7 @@ public class Task {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if (!(object instanceof Task)) return false;
-        Task task = (Task) object;
+        if (!(object instanceof Task task)) return false;
         return id == task.id;
     }
 
@@ -61,10 +61,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return typeOfTask +
-                "    Код:** " + id + ",\n" +
-                "    Название: " + name + ",\n" +
-                "    Описание: " + description + ",\n" +
-                "    Статус: " + status + "\n";
+        return String.format("%d,%s,%s,%s,%s\n", id, typeOfTask, name, status, description);
     }
 }

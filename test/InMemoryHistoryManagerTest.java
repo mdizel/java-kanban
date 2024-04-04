@@ -6,10 +6,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
 
-
     InMemoryTaskManager taskManager = new InMemoryTaskManager();
     HistoryManager historyManager = taskManager.memHisManager;
-
 
     @Test
     public void getHistory() {
@@ -48,5 +46,18 @@ class InMemoryHistoryManagerTest {
         historyManager.add(task1);
         historyManager.add(task2);
         assertEquals(3, historyManager.size(), "Неверное количество задач.");
+        historyManager.remove(task1.getId());
+        assertEquals(2, historyManager.size(), "Неверное количество задач.");
+        historyManager.remove(task.getId());
+        assertEquals(1, historyManager.size(), "Неверное количество задач.");
+        historyManager.remove(task2.getId());
+        assertEquals(0, historyManager.size(), "Неверное количество задач.");
+        historyManager.add(task);
+        assertEquals(1, historyManager.size(), "Неверное количество задач.");
+        historyManager.add(task1);
+        assertEquals(2, historyManager.size(), "Неверное количество задач.");
+        historyManager.add(task2);
+        assertEquals(3, historyManager.size(), "Неверное количество задач.");
+
     }
 }
