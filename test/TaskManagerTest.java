@@ -92,6 +92,7 @@ public class TaskManagerTest {
         Task changedTask = tasks.getFirst();
         assertEquals("Test addNewTaskNEW", changedTask.getName(), "Задача не поменялась.");
         assertEquals(1, tasks.size(), "Неверное количество подзадач.");
-
     }
+
+
 }

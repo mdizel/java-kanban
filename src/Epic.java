@@ -5,7 +5,6 @@ import java.util.HashMap;
 public class Epic extends Task {
 
     private HashMap<Integer, SubTask> subtacks = new HashMap<>();
-    LocalDateTime endTime;
 
     public Epic(String name, String description, Status status) {
         super(name, description, status);
