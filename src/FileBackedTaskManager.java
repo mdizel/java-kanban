@@ -16,7 +16,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public FileBackedTaskManager(String fileName) {
         this.fileName = fileName;
     }
+
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy время: HH:mm");
+
     private void save() {
         try (FileWriter writer = new FileWriter(fileName, CHARSET);
              BufferedWriter bufWriter = new BufferedWriter(writer)) {
@@ -41,28 +43,28 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         int id = Integer.parseInt(splTask[0]);
         Status status = Status.valueOf(splTask[3]);
         Duration duration = null;
-        LocalDateTime startTime = null ;
+        LocalDateTime startTime = null;
         TypeOfTask type = TypeOfTask.valueOf(splTask[1]);
-        if(!splTask[6].equals("none")){
-        duration = Duration.ofMinutes(Long.parseLong(splTask[5]));
-        startTime = LocalDateTime.parse(splTask[6], formatter);
+        if (!splTask[6].equals("none")) {
+            duration = Duration.ofMinutes(Long.parseLong(splTask[5]));
+            startTime = LocalDateTime.parse(splTask[6], formatter);
         }
         if (type == TypeOfTask.EPIC) {
-            if (startTime != null){
-            return new Epic(id, splTask[2], splTask[4], status, duration, startTime);
+            if (startTime != null) {
+                return new Epic(id, splTask[2], splTask[4], status, duration, startTime);
             } else {
                 return new Epic(id, splTask[2], splTask[4], status);
             }
         } else if (type == TypeOfTask.SUBTASK) {
             int parentsId = Integer.parseInt(splTask[7]);
-            if (startTime != null){
+            if (startTime != null) {
                 return new SubTask(id, splTask[2], splTask[4], status, parentsId, duration, startTime);
             } else {
                 return new SubTask(id, splTask[2], splTask[4], status, parentsId);
-                }
             }
-        if (startTime != null){
-        return new Task(id, splTask[2], splTask[4], status, duration, startTime);
+        }
+        if (startTime != null) {
+            return new Task(id, splTask[2], splTask[4], status, duration, startTime);
         } else {
             return new Task(id, splTask[2], splTask[4], status);
         }
@@ -107,7 +109,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
             fileManagerloaded.setLastId();
         } catch (IOException e) {
-            System.out.println("Произошла ошибка во время чтения файла.");
+            throw new ManagerSaveException("Произошла ошибка во время чтения файла.", e);
         }
         return fileManagerloaded;
     }

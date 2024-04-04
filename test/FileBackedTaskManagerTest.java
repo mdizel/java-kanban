@@ -5,8 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FileBackedTaskManagerTest {
     public static Path path = Paths.get("test.csv");
@@ -43,5 +42,13 @@ class FileBackedTaskManagerTest {
     void loadFromFile() {
         TaskManager taskManager = FileBackedTaskManager.loadFromFile(file);
         assertEquals(3, taskManager.getTaskAndSubtasks().size(), "Неверное количество задач.");
+    }
+
+    @Test
+    public void testException() {
+        File file = new File("justFile");
+        assertThrows(ManagerSaveException.class, () -> {
+            FileBackedTaskManager.loadFromFile(file);
+        }, "Необрабатывается исключение ввода вывода");
     }
 }
