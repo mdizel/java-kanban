@@ -5,8 +5,6 @@ import java.util.Scanner;
 
 //Этот класс полностью создан для проверки работы программы.
 public class InputOutput {
-
-
     String fileName = Managers.fileName;
     File file = new File(fileName);
     Scanner scanner = new Scanner(System.in);
@@ -137,7 +135,7 @@ public class InputOutput {
         System.out.println(taskManager.getHistory());
         System.out.println("________________________________________");
         System.out.println("Список задач сортированных по времени");
-        System.out.println(taskManager.getPrioritizedTasks(taskManager.getTaskAndSubtasks()));
+        System.out.println(taskManager.getPrioritizedTasks());
     }
 
     Task task = new Task("Покрасить стены", "Нужно покрасить стены в коридоре в синий цвет.", Status.NEW);
@@ -176,8 +174,8 @@ public class InputOutput {
             LocalDateTime.parse("2024-04-01T08:00:00"));
     Task taskTime2 = new Task("Задача со временем 2", "----2", Status.NEW, Duration.ofMinutes(180),
             LocalDateTime.parse("2024-04-01T11:00:00"));
-   Task taskTime3 = new Task("Задача со временем 3", "----3", Status.NEW, Duration.ofMinutes(320),
-           LocalDateTime.parse("2024-04-01T07:00:00"));
+    Task taskTime3 = new Task("Задача со временем 3", "----3", Status.NEW, Duration.ofMinutes(320),
+            LocalDateTime.parse("2024-04-01T07:00:00"));
     Task taskTime4 = new Task("Задача со временем наложение", "----4", Status.NEW, Duration.ofMinutes(240),
             LocalDateTime.parse("2024-04-01T08:00:00"));
     Epic epicTime = new Epic("Эпик со временем 1", "----э1", Status.NEW);

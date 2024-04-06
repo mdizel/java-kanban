@@ -18,19 +18,14 @@ public class InMemoryTaskManager implements TaskManager {
     protected HistoryManager memHisManager = Managers.getDefaultHistory();
 
     @Override
-    public Set<Task> getPrioritizedTasks(Map<Integer, Task> taskAndSubTasks) {
-        List<Task> list = taskAndSubTasks.values().stream()
-                .filter(task -> task.getStartTime() != null)
-                .toList();
-        tasksTimeSorted.addAll(list);
+    public Set<Task> getPrioritizedTasks() {
         return tasksTimeSorted;
     }
-
 
     private boolean checkTaskCrossing(Task newTask) {
         LocalDateTime startTime = newTask.getStartTime();
         LocalDateTime endTime = newTask.getEndTime();
-        Set<Task> tasksTimeSorted = getPrioritizedTasks(getTaskAndSubtasks());
+        Set<Task> tasksTimeSorted = getPrioritizedTasks();
         Optional<Task> crossTask = tasksTimeSorted.stream()
                 .filter(task -> startTime.isAfter(task.getStartTime()) && startTime.isBefore(task.getEndTime()) ||
                         startTime.isEqual(task.getStartTime()) ||
@@ -59,28 +54,32 @@ public class InMemoryTaskManager implements TaskManager {
         return id;
     }
 
+
     @Override
     public void setTask(Task task) {                     // загружаем задачи
         id = createId();
         task.setId(id);
         if (task.getStartTime() != null) {
-            try {            // обернул в try catch, что бы проверки загрузки выгрузки проходили до конца
-                if (checkTaskCrossing(task)) {
-                    throw new RuntimeException("Сроки исполнения задачи " + task.getName()
-                            + " конфликтует со сроками других задач");
-                }
-            } catch (RuntimeException e) {
-                System.out.println(e.getMessage());
+            if (checkTaskCrossing(task)) {
+                System.out.println("Сроки исполнения задачи " + task.getName() + " конфликтует со сроками других задач");
+                return;
             }
         }
         tasks.put(id, task);
+        if (task.getStartTime() != null) {
+            tasksTimeSorted.add(task);
+        }
     }
+
 
     @Override
     public void setEpic(Epic epic) {                        // загружаем эпики
         id = createId();
         epic.setId(id);
         epics.put(id, epic);
+        if (epic.getStartTime() != null) {
+            tasksTimeSorted.add(epic);
+        }
     }
 
     @Override
@@ -89,17 +88,19 @@ public class InMemoryTaskManager implements TaskManager {
         subTask.setId(id);
         int parentsId = subTask.getParentsId();
         if (subTask.getStartTime() != null) {
-            try {
-                if (checkTaskCrossing(subTask)) {
-                    throw new RuntimeException("Сроки исполнения задачи " + subTask.getName()
-                            + " конфликтует со сроками других задач");
-                }
-            } catch (RuntimeException e) {
-                System.out.println(e.getMessage());
+            if (checkTaskCrossing(subTask)) {
+                System.out.println("Сроки исполнения подзадачи " + subTask.getName() + " конфликтует со сроками других задач");
+                return;
+            }
+            addSubTaskToEpic(subTask, parentsId);
+            if (subTask.getStartTime() != null) {
+                tasksTimeSorted.add(subTask);
+                Epic epic = epics.get(subTask.getParentsId());
+                tasksTimeSorted.add(epic);
             }
         }
-        addSubTaskToEpic(subTask, parentsId);
     }
+
 
     @Override
     public ArrayList<Epic> getEpicsList() {                      //Выводим все эпики списком
@@ -117,7 +118,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void changeTask(Task task) {                     // заменяем задачу
+    public void changeTask(Task task) {                                 // заменяем задачу
         if (task instanceof Epic || task instanceof SubTask) {
             System.out.println("Wrong object type");
             return;
@@ -134,6 +135,9 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
         tasks.put(id, task);
+        if (task.getStartTime() != null) {
+            tasksTimeSorted.add(task);
+        }
     }
 
 
@@ -145,6 +149,9 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
         epics.put(id, epic);
+        if (epic.getStartTime() != null) {
+            tasksTimeSorted.add(epic);
+        }
     }
 
     @Override
@@ -164,6 +171,11 @@ public class InMemoryTaskManager implements TaskManager {
         }
         addSubTaskToEpic(subTask, parentsId);
         subtasks.put(id, subTask);
+        if (subTask.getStartTime() != null) {
+            tasksTimeSorted.add(subTask);
+            Epic epic = epics.get(subTask.getParentsId());
+            tasksTimeSorted.add(epic);
+        }
         checkStatus(parentsId);
         checkDuration(parentsId);
         checkStartTime(parentsId);
@@ -216,14 +228,17 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteAllTasks() {                                       //удаляем все задачи
         for (Integer taskId : tasks.keySet()) {
             memHisManager.remove(taskId);
+            tasksTimeSorted.remove(tasks.get(taskId));
         }
         tasks.clear();
+
     }
 
     @Override
     public void deleteAllEpics() {                                      //удаляем все эпики
         for (Integer epicId : epics.keySet()) {
             memHisManager.remove(epicId);
+            tasksTimeSorted.remove(epics.get(epicId));
         }
         epics.clear();
     }
@@ -234,6 +249,7 @@ public class InMemoryTaskManager implements TaskManager {
             HashMap<Integer, SubTask> subtasks = getSubtaskFromEpic(epicId);
             for (Integer subTaskId : subtasks.keySet()) {
                 memHisManager.remove(subTaskId);
+                tasksTimeSorted.remove(subtasks.get(subTaskId));
             }
             subtasks.clear();
             epics.get(epicId).setSubtacks(subtasks);
@@ -247,6 +263,9 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println("Id " + id + " dont exist");
             return;
         }
+        if (tasks.get(id).getStartTime() != null) {
+            tasksTimeSorted.remove(tasks.get(id));
+        }
         tasks.remove(id);
         memHisManager.remove(id);
     }
@@ -256,6 +275,9 @@ public class InMemoryTaskManager implements TaskManager {
         if (!epics.containsKey(id)) {
             System.out.println("Id " + id + " dont exist");
             return;
+        }
+        if (epics.get(id).getStartTime() != null) {
+            tasksTimeSorted.remove(epics.get(id));
         }
         epics.remove(id);
         memHisManager.remove(id);
@@ -270,6 +292,9 @@ public class InMemoryTaskManager implements TaskManager {
         SubTask subTask = getAllSubtask().get(id);
         int parentsId = subTask.getParentsId();
         HashMap<Integer, SubTask> subtasks = getSubtaskFromEpic(parentsId);
+        if (subtasks.get(id).getStartTime() != null) {
+            tasksTimeSorted.remove(subtasks.get(id));
+        }
         subtasks.remove(id);
         memHisManager.remove(id);
         checkStatus(parentsId);
@@ -298,8 +323,8 @@ public class InMemoryTaskManager implements TaskManager {
         if (!subtasks.isEmpty()) {
             LocalDateTime startTime = (subtasks.stream()
                     .filter(subTask -> subTask.getStartTime() != null)
-                    .min(Comparator.comparing(subTask -> subTask.getStartTime()))
-                    .map(subTask -> subTask.getStartTime())
+                    .min(Comparator.comparing(Task::getStartTime))
+                    .map(Task::getStartTime)
                     .orElse(epic.getStartTime()));  //если эпик не имеет подзаданий, но время старта задан при его создании
             epic.setStartTime(startTime);
         }

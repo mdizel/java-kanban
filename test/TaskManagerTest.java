@@ -102,7 +102,7 @@ public class TaskManagerTest {
         Status status3 = Status.DONE;
         LocalDateTime TimeOfFirstSubt = LocalDateTime.parse("2024-04-01T09:10:00");
         LocalDateTime startTime3 = LocalDateTime.parse("2024-04-01T11:20:00");
-        LocalDateTime earliestTime = LocalDateTime.parse("2024-04-01T06:30:00");
+        LocalDateTime crossTime = LocalDateTime.parse("2024-04-01T09:05:00");
         LocalDateTime startTime4 = LocalDateTime.parse("2024-04-02T19:41:00");
         LocalDateTime startTime5 = LocalDateTime.parse("2024-04-02T20:50:00");
         LocalDateTime lastestTime = LocalDateTime.parse("2024-04-01T19:40:00");
@@ -117,7 +117,7 @@ public class TaskManagerTest {
         SubTask subTaskTime2 = new SubTask("Подзадача к эпику со временем2.", "_описание_",
                 status1, epic.getId(), duration3, startTime3);
         SubTask subTaskTime3 = new SubTask("Подзадача к эпику со временем3.", "_описание_",
-                status1, epic.getId(), duration3, earliestTime);
+                status1, epic.getId(), duration1, crossTime);
         SubTask subTaskTime4 = new SubTask("Подзадача к эпику со временем4.", "_описание_",
                 status3, epic.getId(), duration1, lastestTime);
         SubTask subTaskTime5 = new SubTask("Подзадача к эпику со временем5.", "_описание_",
@@ -127,7 +127,7 @@ public class TaskManagerTest {
         taskManager.setSubTask(subTaskTime);
         taskManager.setSubTask(subTaskTime2);
         taskManager.setSubTask(subTaskTime3);
-        Duration epicDuration = Duration.between(TimeOfFirstSubt, subTaskTime2.getEndTime());
+        Duration epicDuration = subTaskTime.getDuration().plus(subTaskTime2.getDuration());
         assertEquals(Status.NEW, epic.getStatus(), "Неверный статус при всех подзадачах NEW");
         assertEquals(epic.getStartTime(), TimeOfFirstSubt, "Неверное расчетное время старта эпика");
         assertEquals(epic.getDuration(), epicDuration, "Неверный расчетный срок исполнения эпика");

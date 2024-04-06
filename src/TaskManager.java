@@ -44,9 +44,6 @@ public interface TaskManager {
     void deleteSubTask(int id);
 
     void checkStatus(int parentsId);
-    //void checkDuration(int parentsId);
-
-   // void checkStartTime(int parentsId);
 
     HashMap<Integer, SubTask> getAllSubtask();
 
@@ -58,6 +55,6 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
-    Set<Task> getPrioritizedTasks(Map<Integer, Task> taskAndSubTasks);
+    Set<Task> getPrioritizedTasks();
 }
 
