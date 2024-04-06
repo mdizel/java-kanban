@@ -17,7 +17,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.fileName = fileName;
     }
 
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy время: HH:mm");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy время: HH:mm");
 
     private void save() {
         try (FileWriter writer = new FileWriter(fileName, CHARSET);
@@ -45,17 +45,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         Duration duration = null;
         LocalDateTime startTime = null;
         TypeOfTask type = TypeOfTask.valueOf(splTask[1]);
-        if (!splTask[6].equals("none")) {
+        if (!splTask[6].equals("null")) {
             duration = Duration.ofMinutes(Long.parseLong(splTask[5]));
-            startTime = LocalDateTime.parse(splTask[6], formatter);
+            startTime = LocalDateTime.parse(splTask[6], FORMATTER);
         }
         if (type == TypeOfTask.EPIC) {
-            if (startTime != null) {
-                return new Epic(id, splTask[2], splTask[4], status, duration, startTime);
-            } else {
-                return new Epic(id, splTask[2], splTask[4], status);
-            }
-        } else if (type == TypeOfTask.SUBTASK) {
+            return new Epic(id, splTask[2], splTask[4], status);
+                    } else if (type == TypeOfTask.SUBTASK) {
             int parentsId = Integer.parseInt(splTask[7]);
             if (startTime != null) {
                 return new SubTask(id, splTask[2], splTask[4], status, parentsId, duration, startTime);

@@ -11,6 +11,7 @@ public class Task {
     protected int id;
     private Duration duration;
     private LocalDateTime startTime;
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy время: HH:mm");
 
     public Task(String name, String description, Status status) {
         this.name = name;
@@ -66,9 +67,9 @@ public class Task {
 
     public String getStartTimeValue() {
         if (startTime != null) {
-            return startTime.format(formatter);
+            return startTime.format(FORMATTER);
         }
-        return "none";
+        return null;
     }
 
     public void setDuration(Duration duration) {
@@ -83,7 +84,6 @@ public class Task {
         this.startTime = startTime;
     }
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy время: HH:mm");
 
     public int getId() {
         return id;

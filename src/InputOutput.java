@@ -135,6 +135,8 @@ public class InputOutput {
         taskManager.getTask(10003);
         System.out.println("Список из памяти HistoryManager");
         System.out.println(taskManager.getHistory());
+        System.out.println("________________________________________");
+        System.out.println("Список задач сортированных по времени");
         System.out.println(taskManager.getPrioritizedTasks(taskManager.getTaskAndSubtasks()));
     }
 
@@ -174,12 +176,11 @@ public class InputOutput {
             LocalDateTime.parse("2024-04-01T08:00:00"));
     Task taskTime2 = new Task("Задача со временем 2", "----2", Status.NEW, Duration.ofMinutes(180),
             LocalDateTime.parse("2024-04-01T11:00:00"));
-    Task taskTime3 = new Task("Задача со временем 3", "----3", Status.NEW, Duration.ofMinutes(320),
-            LocalDateTime.parse("2024-04-01T07:00:00"));
+   Task taskTime3 = new Task("Задача со временем 3", "----3", Status.NEW, Duration.ofMinutes(320),
+           LocalDateTime.parse("2024-04-01T07:00:00"));
     Task taskTime4 = new Task("Задача со временем наложение", "----4", Status.NEW, Duration.ofMinutes(240),
             LocalDateTime.parse("2024-04-01T08:00:00"));
-    Epic epicTime = new Epic("Эпик со временем 1", "----э1", Status.NEW, Duration.ofMinutes(20),
-            LocalDateTime.parse("2024-04-07T14:10:00"));
+    Epic epicTime = new Epic("Эпик со временем 1", "----э1", Status.NEW);
     SubTask subTaskTime = new SubTask("Подзадача к эпику 10007 со временем1.", "______сб1",
             Status.IN_PROGRESS, 10007, Duration.ofMinutes(60), LocalDateTime.parse("2024-04-01T18:15:00"));
     SubTask subTaskTime2 = new SubTask("Подзадача к эпику 10007 со временем2.", "______сб2",

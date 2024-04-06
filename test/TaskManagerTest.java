@@ -100,7 +100,6 @@ public class TaskManagerTest {
         Status status1 = Status.NEW;
         Status status2 = Status.IN_PROGRESS;
         Status status3 = Status.DONE;
-        LocalDateTime startTime1 = LocalDateTime.parse("2024-04-01T07:00:00");
         LocalDateTime TimeOfFirstSubt = LocalDateTime.parse("2024-04-01T09:10:00");
         LocalDateTime startTime3 = LocalDateTime.parse("2024-04-01T11:20:00");
         LocalDateTime earliestTime = LocalDateTime.parse("2024-04-01T06:30:00");
@@ -111,8 +110,7 @@ public class TaskManagerTest {
         Duration duration2 = Duration.ofMinutes(119);
         Duration duration3 = Duration.ofMinutes(250);
         Duration duration4 = Duration.ofMinutes(60);
-        Epic epic = new Epic("Эпик со временем 1", "----э1", status1, duration1,
-                startTime1);
+        Epic epic = new Epic("Эпик со временем 1", "----э1", status1);
         taskManager.setEpic(epic);
         SubTask subTaskTime = new SubTask("Подзадача к эпику со временем1.", "_описание_",
                 status1, epic.getId(), duration2, TimeOfFirstSubt);

@@ -44,9 +44,9 @@ public interface TaskManager {
     void deleteSubTask(int id);
 
     void checkStatus(int parentsId);
-    void checkDuration(int parentsId);
+    //void checkDuration(int parentsId);
 
-    void checkStartTime(int parentsId);
+   // void checkStartTime(int parentsId);
 
     HashMap<Integer, SubTask> getAllSubtask();
 
