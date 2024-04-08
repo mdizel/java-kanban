@@ -92,12 +92,12 @@ public class InMemoryTaskManager implements TaskManager {
                 System.out.println("Сроки исполнения подзадачи " + subTask.getName() + " конфликтует со сроками других задач");
                 return;
             }
-            addSubTaskToEpic(subTask, parentsId);
-            if (subTask.getStartTime() != null) {
-                tasksTimeSorted.add(subTask);
-                Epic epic = epics.get(subTask.getParentsId());
-                tasksTimeSorted.add(epic);
-            }
+        }
+        addSubTaskToEpic(subTask, parentsId);
+        if (subTask.getStartTime() != null) {
+            tasksTimeSorted.add(subTask);
+            Epic epic = epics.get(subTask.getParentsId());
+            tasksTimeSorted.add(epic);
         }
     }
 
