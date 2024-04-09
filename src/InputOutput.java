@@ -136,6 +136,9 @@ public class InputOutput {
         System.out.println("________________________________________");
         System.out.println("Список задач сортированных по времени");
         System.out.println(taskManager.getPrioritizedTasks());
+        taskManager.changeTask(taskTime5);
+        System.out.println("Список задач сортированных по времени после обновления задачи");
+        System.out.println(taskManager.getPrioritizedTasks());
     }
 
     Task task = new Task("Покрасить стены", "Нужно покрасить стены в коридоре в синий цвет.", Status.NEW);
@@ -172,6 +175,8 @@ public class InputOutput {
     Epic epic5 = new Epic(10003, "Ошибочный Эпик для Задачи", "--------", Status.NEW);
     Task taskTime = new Task("Задача со временем 1", "----1", Status.NEW, Duration.ofMinutes(120),
             LocalDateTime.parse("2024-04-01T08:00:00"));
+    Task taskTime5 = new Task(10010, "Задача со временем для замены", "-----", Status.NEW,
+            Duration.ofMinutes(119), LocalDateTime.parse("2024-04-06T11:20:00"));
     Task taskTime2 = new Task("Задача со временем 2", "----2", Status.NEW, Duration.ofMinutes(180),
             LocalDateTime.parse("2024-04-01T11:00:00"));
     Task taskTime3 = new Task("Задача со временем 3", "----3", Status.NEW, Duration.ofMinutes(320),

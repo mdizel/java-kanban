@@ -61,7 +61,7 @@ public class InMemoryTaskManager implements TaskManager {
         task.setId(id);
         if (task.getStartTime() != null) {
             if (checkTaskCrossing(task)) {
-                System.out.println("Сроки исполнения задачи " + task.getName() + " конфликтует со сроками других задач");
+                //System.out.println("Сроки исполнения задачи " + task.getName() + " конфликтует со сроками других задач");
                 return;
             }
         }
@@ -129,9 +129,15 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
         if (task.getStartTime() != null) {
-            if (checkTaskCrossing(task)) {
-                throw new RuntimeException("Сроки исполнения задачи " + task.getName()
-                        + " конфликтует со сроками других задач");
+            tasksTimeSorted.remove(tasks.get(id));
+            try {
+                if (checkTaskCrossing(task)) {
+                    throw new TaskTimeException("Сроки исполнения задачи: " + "\"" + task.getName() + "\""
+                            + " конфликтуют со сроками других задач");
+                }
+            } catch (TaskTimeException e) {
+                System.out.println(e.getMessage());
+                return;
             }
         }
         tasks.put(id, task);
@@ -150,6 +156,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         epics.put(id, epic);
         if (epic.getStartTime() != null) {
+            tasksTimeSorted.remove(epics.get(id));
             tasksTimeSorted.add(epic);
         }
     }
@@ -164,9 +171,15 @@ public class InMemoryTaskManager implements TaskManager {
         int parentsId = (subTask.getParentsId());
         HashMap<Integer, SubTask> subtasks = getSubtaskFromEpic(parentsId);
         if (subTask.getStartTime() != null) {
-            if (checkTaskCrossing(subTask)) {
-                throw new RuntimeException("Сроки исполнения задачи " + subTask.getName()
-                        + " конфликтует со сроками других задач");
+            tasksTimeSorted.remove(subtasks.get(id));
+            try {
+                if (checkTaskCrossing(subTask)) {
+                    throw new TaskTimeException("Сроки исполнения задачи: " + "\"" + subTask.getName() + "\""
+                            + " конфликтуют со сроками других задач");
+                }
+            } catch (TaskTimeException e) {
+                System.out.println(e.getMessage());
+                return;
             }
         }
         addSubTaskToEpic(subTask, parentsId);
@@ -228,7 +241,9 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteAllTasks() {                                       //удаляем все задачи
         for (Integer taskId : tasks.keySet()) {
             memHisManager.remove(taskId);
-            tasksTimeSorted.remove(tasks.get(taskId));
+            if (tasks.get(taskId).getStartTime() != null) {
+                tasksTimeSorted.remove(tasks.get(taskId));
+            }
         }
         tasks.clear();
 
@@ -238,7 +253,9 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteAllEpics() {                                      //удаляем все эпики
         for (Integer epicId : epics.keySet()) {
             memHisManager.remove(epicId);
-            tasksTimeSorted.remove(epics.get(epicId));
+            if (epics.get(epicId).getStartTime() != null) {
+                tasksTimeSorted.remove(epics.get(epicId));
+            }
         }
         epics.clear();
     }
@@ -249,13 +266,14 @@ public class InMemoryTaskManager implements TaskManager {
             HashMap<Integer, SubTask> subtasks = getSubtaskFromEpic(epicId);
             for (Integer subTaskId : subtasks.keySet()) {
                 memHisManager.remove(subTaskId);
-                tasksTimeSorted.remove(subtasks.get(subTaskId));
+                if (subtasks.get(subTaskId).getStartTime() != null) {
+                    tasksTimeSorted.remove(subtasks.get(subTaskId));
+                }
             }
             subtasks.clear();
             epics.get(epicId).setSubtacks(subtasks);
         }
     }
-
 
     @Override
     public void deleteTask(int id) {                                          // Удаляем задачу по id
