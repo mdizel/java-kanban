@@ -61,7 +61,7 @@ public class InMemoryTaskManager implements TaskManager {
         task.setId(id);
         if (task.getStartTime() != null) {
             if (checkTaskCrossing(task)) {
-                //System.out.println("Сроки исполнения задачи " + task.getName() + " конфликтует со сроками других задач");
+                System.out.println("Сроки исполнения задачи " + task.getName() + " конфликтует со сроками других задач");
                 return;
             }
         }
@@ -130,14 +130,9 @@ public class InMemoryTaskManager implements TaskManager {
         }
         if (task.getStartTime() != null) {
             tasksTimeSorted.remove(tasks.get(id));
-            try {
-                if (checkTaskCrossing(task)) {
-                    throw new TaskTimeException("Сроки исполнения задачи: " + "\"" + task.getName() + "\""
-                            + " конфликтуют со сроками других задач");
-                }
-            } catch (TaskTimeException e) {
-                System.out.println(e.getMessage());
-                return;
+            if (checkTaskCrossing(task)) {
+                throw new TaskTimeException("Сроки исполнения задачи: " + "\"" + task.getName() + "\""
+                        + " конфликтуют со сроками других задач");
             }
         }
         tasks.put(id, task);
@@ -172,14 +167,9 @@ public class InMemoryTaskManager implements TaskManager {
         HashMap<Integer, SubTask> subtasks = getSubtaskFromEpic(parentsId);
         if (subTask.getStartTime() != null) {
             tasksTimeSorted.remove(subtasks.get(id));
-            try {
-                if (checkTaskCrossing(subTask)) {
-                    throw new TaskTimeException("Сроки исполнения задачи: " + "\"" + subTask.getName() + "\""
-                            + " конфликтуют со сроками других задач");
-                }
-            } catch (TaskTimeException e) {
-                System.out.println(e.getMessage());
-                return;
+            if (checkTaskCrossing(subTask)) {
+                throw new TaskTimeException("Сроки исполнения задачи: " + "\"" + subTask.getName() + "\""
+                        + " конфликтуют со сроками других задач");
             }
         }
         addSubTaskToEpic(subTask, parentsId);
