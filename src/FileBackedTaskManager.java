@@ -17,7 +17,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.fileName = fileName;
     }
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy время: HH:mm");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     private void save() {
         try (FileWriter writer = new FileWriter(fileName, CHARSET);

@@ -2,6 +2,8 @@ import java.io.File;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Scanner;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 //Этот класс полностью создан для проверки работы программы.
 public class InputOutput {
@@ -9,6 +11,9 @@ public class InputOutput {
     File file = new File(fileName);
     Scanner scanner = new Scanner(System.in);
     TaskManager taskManager;
+
+
+
     int count = 1;
 
     TaskManager managerChoose() {
@@ -41,7 +46,12 @@ public class InputOutput {
         count++;
     }
 
-    public void test() {                           // Метод для теста программы
+    public void test() {// Метод для теста программы
+
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .registerTypeAdapter(Duration.class, new DurationAdapter())
+                .create();
         taskManager = managerChoose();
         System.out.println("Список задач после загрузки из файла:");
         print();
@@ -139,6 +149,9 @@ public class InputOutput {
         taskManager.changeTask(taskTime5);
         System.out.println("Список задач сортированных по времени после обновления задачи");
         System.out.println(taskManager.getPrioritizedTasks());
+        System.out.println("________________________________________");
+        System.out.println(taskManager.getTasksList());
+        System.out.println(gson.toJson(taskTime));
     }
 
     Task task = new Task("Покрасить стены", "Нужно покрасить стены в коридоре в синий цвет.", Status.NEW);
