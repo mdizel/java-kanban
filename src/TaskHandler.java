@@ -63,22 +63,21 @@ public class TaskHandler implements HttpHandler {
         String[] pathSplit = exchange.getRequestURI().getPath().split("/");
         String requestMethod = exchange.getRequestMethod();
         if (pathSplit.length == 3) {
-        Optional<Integer> idOpt = getId(pathSplit);
-        if (idOpt.isEmpty()) {
-            writeResponse(exchange, "Wrong task Id", 404);
-            return;
-        }
-        int id = idOpt.get();
+            Optional<Integer> idOpt = getId(pathSplit);
+            if (idOpt.isEmpty()) {
+                writeResponse(exchange, "Wrong task Id", 404);
+                return;
+            }
+            int id = idOpt.get();
             Task task = taskManager.getTask(id);
             if (task == null) {
-                writeResponse(exchange, "Task not found", 404);
+                writeResponse(exchange, "Task Id " + id + " not found", 404);
                 return;
             }
             if (requestMethod.equals("GET")) {
                 writeResponse(exchange, gson.toJson(task), 200);
             } else if (requestMethod.equals("DELETE")) {
-                writeResponse(exchange, "Задача " + task.getId() + " успешно удалена", 200);
-                taskManager.deleteTask(id);
+                writeResponse(exchange, "Задача " + id + " успешно удалена", 200);
             }
         } else if (pathSplit.length == 2) {
             if (requestMethod.equals("GET")) {
@@ -95,7 +94,10 @@ public class TaskHandler implements HttpHandler {
                         taskManager.setTask(taskNew);
                         writeResponse(exchange, "Задача успешно добавлена", 201);
                     } else {
-                        taskManager.changeTask(taskNew);
+                        if (!taskManager.changeTask(taskNew)) {
+                            writeResponse(exchange, "Task Id " + taskNew.getId() + " not found", 404);
+                            return;
+                        }
                         writeResponse(exchange, "Задача " + taskNew.getId() + " успешно обновлена",
                                 201);
                     }

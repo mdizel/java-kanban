@@ -118,15 +118,15 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void changeTask(Task task) {                                 // заменяем задачу
+    public boolean changeTask(Task task) {                                 // заменяем задачу
         if (task instanceof Epic || task instanceof SubTask) {
             System.out.println("Wrong object type");
-            return;
+            return false;
         }
         int id = task.getId();
         if (!tasks.containsKey(id)) {
             System.out.println("Id " + id + " dont exist");
-            return;
+            return false;
         }
         if (task.getStartTime() != null) {
             tasksTimeSorted.remove(tasks.get(id));
@@ -139,29 +139,31 @@ public class InMemoryTaskManager implements TaskManager {
         if (task.getStartTime() != null) {
             tasksTimeSorted.add(task);
         }
+        return true;
     }
 
 
     @Override
-    public void changeEpic(Epic epic) {                        // заменяем эпик
+    public boolean changeEpic(Epic epic) {                        // заменяем эпик
         int id = epic.getId();
         if (!epics.containsKey(id)) {
             System.out.println("Id " + id + " dont exist");
-            return;
+            return false;
         }
         epics.put(id, epic);
         if (epic.getStartTime() != null) {
             tasksTimeSorted.remove(epics.get(id));
             tasksTimeSorted.add(epic);
         }
+        return true;
     }
 
     @Override
-    public void changeSubTask(SubTask subTask) {                // заменяем подзадачу
+    public boolean changeSubTask(SubTask subTask) {                // заменяем подзадачу
         int id = subTask.getId();
         if (!getAllSubtask().containsKey(id)) {
             System.out.println("Id " + id + " dont exist");
-            return;
+            return false;
         }
         int parentsId = (subTask.getParentsId());
         HashMap<Integer, SubTask> subtasks = getSubtaskFromEpic(parentsId);
@@ -182,6 +184,7 @@ public class InMemoryTaskManager implements TaskManager {
         checkStatus(parentsId);
         checkDuration(parentsId);
         checkStartTime(parentsId);
+        return true;
     }
 
 
@@ -266,36 +269,38 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void deleteTask(int id) {                                          // Удаляем задачу по id
+    public boolean deleteTask(int id) {                                          // Удаляем задачу по id
         if (!tasks.containsKey(id)) {
             System.out.println("Id " + id + " dont exist");
-            return;
+            return false;
         }
         if (tasks.get(id).getStartTime() != null) {
             tasksTimeSorted.remove(tasks.get(id));
         }
         tasks.remove(id);
         memHisManager.remove(id);
+        return true;
     }
 
     @Override
-    public void deleteEpic(int id) {                                          // Удаляем эпик по id
+    public boolean deleteEpic(int id) {                                          // Удаляем эпик по id
         if (!epics.containsKey(id)) {
             System.out.println("Id " + id + " dont exist");
-            return;
+            return false;
         }
         if (epics.get(id).getStartTime() != null) {
             tasksTimeSorted.remove(epics.get(id));
         }
         epics.remove(id);
         memHisManager.remove(id);
+        return true;
     }
 
     @Override
-    public void deleteSubTask(int id) {                                          // Удаляем подзадачу по id
+    public boolean deleteSubTask(int id) {                                          // Удаляем подзадачу по id
         if (!getAllSubtask().containsKey(id)) {
             System.out.println("Id " + id + " dont exist");
-            return;
+            return false;
         }
         SubTask subTask = getAllSubtask().get(id);
         int parentsId = subTask.getParentsId();
@@ -310,6 +315,7 @@ public class InMemoryTaskManager implements TaskManager {
         checkStartTime(parentsId);
         Epic epic = epics.get(parentsId);
         epic.setSubtacks(subtasks);
+        return true;
     }
 
     protected void checkDuration(int parentsId) {                 // проверка продолжительности

@@ -154,39 +154,45 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void changeTask(Task task) {
-        super.changeTask(task);
+    public boolean changeTask(Task task) {
+        boolean isSuccess = super.changeTask(task);
         save();
+        return isSuccess;
     }
 
     @Override
-    public void changeEpic(Epic epic) {
-        super.changeEpic(epic);
+    public boolean changeEpic(Epic epic) {
+        boolean isSuccess = super.changeEpic(epic);
         save();
+        return isSuccess;
     }
 
     @Override
-    public void changeSubTask(SubTask subTask) {
-        super.changeSubTask(subTask);
+    public boolean changeSubTask(SubTask subTask) {
+        boolean isSuccess = super.changeSubTask(subTask);
         save();
+        return isSuccess;
     }
 
     @Override
-    public void deleteTask(int id) {
-        super.deleteTask(id);
+    public boolean deleteTask(int id) {
+        boolean isSuccess = super.deleteTask(id);
         save();
+        return isSuccess;
     }
 
     @Override
-    public void deleteEpic(int id) {
-        super.deleteEpic(id);
+    public boolean deleteEpic(int id) {
+        boolean isSuccess = super.deleteEpic(id);
         save();
+        return isSuccess;
     }
 
     @Override
-    public void deleteSubTask(int id) {
-        super.deleteSubTask(id);
+    public boolean deleteSubTask(int id) {
+        boolean isSuccess = super.deleteSubTask(id);
         save();
+        return isSuccess;
     }
 
     @Override
