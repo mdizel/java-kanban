@@ -116,7 +116,7 @@ public class InputOutput {
         System.out.println("Список эпиков");
         System.out.println("Удаляем задачу 10001, подзадачу 10005, эпик 10009");
         taskManager.deleteTask(10001);
-        taskManager.deleteEpic(10009);
+        //taskManager.deleteEpic(10009);
         taskManager.deleteSubTask(10005);
         print();
         System.out.println("Получаем подзадачи Эпика 10004");
@@ -173,7 +173,7 @@ public class InputOutput {
             Status.NEW, 10004);
     SubTask subTask4 = new SubTask(10006, "Залить фундамент", "Заказать бетон вызвать бетоннасос",
             Status.NEW, 10004);
-    SubTask subTask5 = new SubTask("Привезти доски", "Привезти доски с рынка", Status.NEW, 10009);
+    SubTask subTask5 = new SubTask("Привезти доски", "Привезти доски с рынка", Status.NEW, 10007);
     SubTask subTask6 = new SubTask("Просто подзадача к эпику.", "Добавление по id эпика",
             Status.DONE, 10007);
     SubTask subTask7 = new SubTask(10007, "Ошибочная подзадача для эпика",

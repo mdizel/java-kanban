@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class HttpTaskServer {
-    private static final int PORT = 8081;
+    private static final int PORT = 8080;
     static HttpServer httpServer;
 
     public static void main(String[] args) throws IOException {
