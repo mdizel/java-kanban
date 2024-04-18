@@ -56,13 +56,13 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     @Override
-    public void setTask(Task task) {                     // загружаем задачи
+    public void setTask  (Task task) throws TaskTimeException {                     // загружаем задачи
         id = createId();
         task.setId(id);
-        if (task.getStartTime() != null) {
+          if (task.getStartTime() != null) {
             if (checkTaskCrossing(task)) {
-                System.out.println("Сроки исполнения задачи " + task.getName() + " конфликтует со сроками других задач");
-                return;
+                throw new TaskTimeException("Сроки исполнения задачи: " + "\"" + task.getName() + "\""
+                        + " конфликтуют со сроками других задач");
             }
         }
         tasks.put(id, task);
@@ -89,8 +89,8 @@ public class InMemoryTaskManager implements TaskManager {
         int parentsId = subTask.getParentsId();
         if (subTask.getStartTime() != null) {
             if (checkTaskCrossing(subTask)) {
-                System.out.println("Сроки исполнения подзадачи " + subTask.getName() + " конфликтует со сроками других задач");
-                return;
+                throw new TaskTimeException("Сроки исполнения задачи: " + "\"" + subTask.getName() + "\""
+                        + " конфликтуют со сроками других задач");
             }
         }
         addSubTaskToEpic(subTask, parentsId);

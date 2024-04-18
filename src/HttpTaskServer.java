@@ -13,10 +13,8 @@ public class HttpTaskServer {
         inputOutput.test();
         TaskManager taskManager = inputOutput.taskManager;
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
-        httpServer.createContext("/tasks", new TaskHandler(taskManager));
-        httpServer.start(); // запускаем сервер
-
+        httpServer.createContext("/", new TaskHandler(taskManager));
+        httpServer.start();
         System.out.println("HTTP-сервер запущен на " + PORT + " порту!");
-
     }
 }

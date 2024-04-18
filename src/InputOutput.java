@@ -192,10 +192,10 @@ public class InputOutput {
             Duration.ofMinutes(119), LocalDateTime.parse("2024-04-06T11:20:00"));
     Task taskTime2 = new Task("Задача со временем 2", "----2", Status.NEW, Duration.ofMinutes(180),
             LocalDateTime.parse("2024-04-01T11:00:00"));
-    Task taskTime3 = new Task("Задача со временем 3", "----3", Status.NEW, Duration.ofMinutes(320),
+    Task taskTime3 = new Task("Задача со временем 3", "----3", Status.NEW, Duration.ofMinutes(240),
+            LocalDateTime.parse("2024-04-08T07:00:00"));
+    Task taskTime4 = new Task("Задача со временем наложение", "----4", Status.NEW, Duration.ofMinutes(50),
             LocalDateTime.parse("2024-04-01T07:00:00"));
-    Task taskTime4 = new Task("Задача со временем наложение", "----4", Status.NEW, Duration.ofMinutes(240),
-            LocalDateTime.parse("2024-04-01T08:00:00"));
     Epic epicTime = new Epic("Эпик со временем 1", "----э1", Status.NEW);
     SubTask subTaskTime = new SubTask("Подзадача к эпику 10007 со временем1.", "______сб1",
             Status.IN_PROGRESS, 10007, Duration.ofMinutes(60), LocalDateTime.parse("2024-04-01T18:15:00"));

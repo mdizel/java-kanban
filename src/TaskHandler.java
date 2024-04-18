@@ -1,8 +1,12 @@
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import com.google.gson.Gson;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -18,7 +22,7 @@ public class TaskHandler implements HttpHandler {
             .registerTypeAdapter(Duration.class, new DurationAdapter())
             .create();
 
-    public TaskHandler(TaskManager taskManager){
+    public TaskHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
     }
 
@@ -54,43 +58,72 @@ public class TaskHandler implements HttpHandler {
         }
 
     }
+
     private void handleTaskRequest(HttpExchange exchange) throws IOException {
         String[] pathSplit = exchange.getRequestURI().getPath().split("/");
         String requestMethod = exchange.getRequestMethod();
-            if (requestMethod.equals("GET") && pathSplit.length == 2){
-                //writeResponse(exchange, gson.toJson("Что то вышло"), 200);
-                writeResponse(exchange, gson.toJson(taskManager.getTasksList()), 200);
-            } else if (requestMethod.equals("GET") && pathSplit.length == 3){
-                Optional<Integer> idOpt = getId(pathSplit);
-                if (idOpt.isEmpty()) {
-                    writeResponse(exchange, "Wrong task Id", 404);
-                    return;
-                }
-                int id = idOpt.get();
-                Task task = taskManager.getTask(id);
-                if(task == null){
-                    writeResponse(exchange, "Task not found", 404);
-                    return;
-                }
-                writeResponse(exchange, gson.toJson(task), 200);
+        if (pathSplit.length == 3) {
+        Optional<Integer> idOpt = getId(pathSplit);
+        if (idOpt.isEmpty()) {
+            writeResponse(exchange, "Wrong task Id", 404);
+            return;
+        }
+        int id = idOpt.get();
+            Task task = taskManager.getTask(id);
+            if (task == null) {
+                writeResponse(exchange, "Task not found", 404);
+                return;
             }
+            if (requestMethod.equals("GET")) {
+                writeResponse(exchange, gson.toJson(task), 200);
+            } else if (requestMethod.equals("DELETE")) {
+                writeResponse(exchange, "Задача " + task.getId() + " успешно удалена", 200);
+                taskManager.deleteTask(id);
+            }
+        } else if (pathSplit.length == 2) {
+            if (requestMethod.equals("GET")) {
+                writeResponse(exchange, gson.toJson(taskManager.getTasksList()), 200);
+            } else if (requestMethod.equals("POST")) {
+                Optional<Task> taskOpt = parseBody(exchange.getRequestBody());
+                if (taskOpt.isEmpty()) {
+                    writeResponse(exchange, "Empty request", 404);
+                    return;
+                }
+                try {
+                    Task taskNew = taskOpt.get();
+                    if (taskNew.getId() == 0) {
+                        taskManager.setTask(taskNew);
+                        writeResponse(exchange, "Задача успешно добавлена", 201);
+                    } else {
+                        taskManager.changeTask(taskNew);
+                        writeResponse(exchange, "Задача " + taskNew.getId() + " успешно обновлена",
+                                201);
+                    }
+                } catch (TaskTimeException e) {
+                    writeResponse(exchange, e.getMessage(), 406);
+                }
+            }
+        } else {
+            writeResponse(exchange, "Bad request", 404);
+        }
     }
 
-    private void handleEpicRequest(HttpExchange exchange) throws IOException{
+    private void handleEpicRequest(HttpExchange exchange) throws IOException {
 
     }
 
-    private void handleSubtaskRequest(HttpExchange exchange) throws IOException{
+    private void handleSubtaskRequest(HttpExchange exchange) throws IOException {
 
     }
 
-    private void handleHistoryRequest(HttpExchange exchange) throws IOException{
+    private void handleHistoryRequest(HttpExchange exchange) throws IOException {
 
     }
 
-    private void handlePrioritizedRequest(HttpExchange exchange) throws IOException{
+    private void handlePrioritizedRequest(HttpExchange exchange) throws IOException {
 
     }
+
     private void writeResponse(HttpExchange exchange,
                                String responseString,
                                int responseCode) throws IOException {
@@ -102,13 +135,22 @@ public class TaskHandler implements HttpHandler {
     }
 
     private Optional<Integer> getId(String[] pathSplit) {
-                try {
+        try {
             return Optional.of(Integer.parseInt(pathSplit[2]));
         } catch (NumberFormatException exception) {
             return Optional.empty();
         }
     }
 
+    private Optional<Task> parseBody(InputStream bodyInputStream) throws IOException {
+        String body = new String(bodyInputStream.readAllBytes(), DEFAULT_CHARSET);
+        JsonElement jsonElement = JsonParser.parseString(body);
+        if (!jsonElement.isJsonObject()) {
+            return Optional.empty();
+        }
+        Task task = gson.fromJson(jsonElement, Task.class);
+        return Optional.of(task);
+    }
     /*private Endpoints getEndpoint(String requestPath, String requestMethod) {
         String[] pathParts = requestPath.split("/");
 
@@ -122,12 +164,4 @@ public class TaskHandler implements HttpHandler {
         return Endpoints.UNKNOWN;
     }*/
 
-  /*  private Optional<Integer> getTaskId(HttpExchange exchange) {
-        String[] pathParts = exchange.getRequestURI().getPath().split("/");
-        try {
-            return Optional.of(Integer.parseInt(pathParts[2]));
-        } catch (NumberFormatException exception) {
-            return Optional.empty();
-        }
-    }*/
 }
