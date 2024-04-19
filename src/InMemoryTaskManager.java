@@ -56,10 +56,10 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     @Override
-    public void setTask  (Task task) throws TaskTimeException {                     // загружаем задачи
+    public void setTask(Task task) throws TaskTimeException {                     // загружаем задачи
         id = createId();
         task.setId(id);
-          if (task.getStartTime() != null) {
+        if (task.getStartTime() != null) {
             if (checkTaskCrossing(task)) {
                 throw new TaskTimeException("Сроки исполнения задачи: " + "\"" + task.getName() + "\""
                         + " конфликтуют со сроками других задач");

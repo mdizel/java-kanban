@@ -126,7 +126,9 @@ public class TaskManagerTest {
                 status2, epic.getId(), duration4, startTime5);
         taskManager.setSubTask(subTaskTime);
         taskManager.setSubTask(subTaskTime2);
-        taskManager.setSubTask(subTaskTime3);
+        assertThrows(TaskTimeException.class, () ->
+                        taskManager.setSubTask(subTaskTime3),
+                "Подгружена подзадача с конфликтом по времени исполнения");
         Duration epicDuration = subTaskTime.getDuration().plus(subTaskTime2.getDuration());
         assertEquals(Status.NEW, epic.getStatus(), "Неверный статус при всех подзадачах NEW");
         assertEquals(epic.getStartTime(), TimeOfFirstSubt, "Неверное расчетное время старта эпика");

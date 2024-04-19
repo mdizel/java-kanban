@@ -205,7 +205,8 @@ public class TaskHandler implements HttpHandler {
                         writeResponse(exchange, "Подзадача успешно добавлена", 201);
                     } else {
                         if (!taskManager.changeSubTask(SubTaskNew)) {
-                            writeResponse(exchange, "SubTask Id " + SubTaskNew.getId() + " not found", 404);
+                            writeResponse(exchange, "SubTask Id " + SubTaskNew.getId() + " not found",
+                                    404);
                             return;
                         }
                         writeResponse(exchange, "Подзадача " + SubTaskNew.getId() + " успешно обновлена",

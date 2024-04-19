@@ -11,17 +11,15 @@ public class HttpTaskServer {
         InputOutput inputOutput = new InputOutput();
         inputOutput.test();
         TaskManager taskManager = inputOutput.taskManager;
-        startServer(taskManager);
+        httpServer = startServer(taskManager);
+        httpServer.stop(2);
     }
 
-   public static void startServer(TaskManager taskManager) throws IOException {
+    public static HttpServer startServer(TaskManager taskManager) throws IOException {
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
         httpServer.createContext("/", new TaskHandler(taskManager));
         httpServer.start();
         System.out.println("HTTP-сервер запущен на " + PORT + " порту!");
-    }
-
-    public static void stopServer() {
-        httpServer.stop(2);
+        return httpServer;
     }
 }
