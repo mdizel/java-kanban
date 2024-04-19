@@ -46,8 +46,7 @@ public class InputOutput {
         count++;
     }
 
-    public void test() {// Метод для теста программы
-
+    public void test() {                      // Метод для теста программы
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                 .registerTypeAdapter(Duration.class, new DurationAdapter())
