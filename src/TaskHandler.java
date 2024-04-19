@@ -193,23 +193,23 @@ public class TaskHandler implements HttpHandler {
             if (requestMethod.equals("GET")) {
                 writeResponse(exchange, gson.toJson(taskManager.getSubtasksList()), 200);
             } else if (requestMethod.equals("POST")) {
-                Optional<SubTask> SubTaskOpt = parseSubtaskBody(exchange.getRequestBody());
-                if (SubTaskOpt.isEmpty()) {
+                Optional<SubTask> subTaskOpt = parseSubtaskBody(exchange.getRequestBody());
+                if (subTaskOpt.isEmpty()) {
                     writeResponse(exchange, "Empty request", 404);
                     return;
                 }
                 try {
-                    SubTask SubTaskNew = SubTaskOpt.get();
-                    if (SubTaskNew.getId() == 0) {
-                        taskManager.setSubTask(SubTaskNew);
+                    SubTask subTaskNew = subTaskOpt.get();
+                    if (subTaskNew.getId() == 0) {
+                        taskManager.setSubTask(subTaskNew);
                         writeResponse(exchange, "Подзадача успешно добавлена", 201);
                     } else {
-                        if (!taskManager.changeSubTask(SubTaskNew)) {
-                            writeResponse(exchange, "SubTask Id " + SubTaskNew.getId() + " not found",
+                        if (!taskManager.changeSubTask(subTaskNew)) {
+                            writeResponse(exchange, "SubTask Id " + subTaskNew.getId() + " not found",
                                     404);
                             return;
                         }
-                        writeResponse(exchange, "Подзадача " + SubTaskNew.getId() + " успешно обновлена",
+                        writeResponse(exchange, "Подзадача " + subTaskNew.getId() + " успешно обновлена",
                                 201);
                     }
                 } catch (TaskTimeException e) {
