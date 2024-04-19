@@ -1,6 +1,8 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,7 +48,6 @@ public class TaskManagerTest {
         epic1.setId(taskId);
         assertEquals(epic, epic1, "Эпики c одинаковым id  не совпали.");
         List<Epic> epics = taskManager.getEpicsList();
-
         assertNotNull(epics, "Эпики не возвращаются.");
         assertEquals(2, epics.size(), "Неверное количество эпиков.");
         assertEquals(epic, epics.getFirst(), "Эпики не совпадают.");
@@ -92,6 +93,58 @@ public class TaskManagerTest {
         Task changedTask = tasks.getFirst();
         assertEquals("Test addNewTaskNEW", changedTask.getName(), "Задача не поменялась.");
         assertEquals(1, tasks.size(), "Неверное количество подзадач.");
+    }
 
+    @Test
+    void checkStatusAndTime() {
+        Status status1 = Status.NEW;
+        Status status2 = Status.IN_PROGRESS;
+        Status status3 = Status.DONE;
+        LocalDateTime TimeOfFirstSubt = LocalDateTime.parse("2024-04-01T09:10:00");
+        LocalDateTime startTime3 = LocalDateTime.parse("2024-04-01T11:20:00");
+        LocalDateTime crossTime = LocalDateTime.parse("2024-04-01T09:05:00");
+        LocalDateTime startTime4 = LocalDateTime.parse("2024-04-02T19:41:00");
+        LocalDateTime startTime5 = LocalDateTime.parse("2024-04-02T20:50:00");
+        LocalDateTime lastestTime = LocalDateTime.parse("2024-04-01T19:40:00");
+        Duration duration1 = Duration.ofMinutes(1440);
+        Duration duration2 = Duration.ofMinutes(119);
+        Duration duration3 = Duration.ofMinutes(250);
+        Duration duration4 = Duration.ofMinutes(60);
+        Epic epic = new Epic("Эпик со временем 1", "----э1", status1);
+        taskManager.setEpic(epic);
+        SubTask subTaskTime = new SubTask("Подзадача к эпику со временем1.", "_описание_",
+                status1, epic.getId(), duration2, TimeOfFirstSubt);
+        SubTask subTaskTime2 = new SubTask("Подзадача к эпику со временем2.", "_описание_",
+                status1, epic.getId(), duration3, startTime3);
+        SubTask subTaskTime3 = new SubTask("Подзадача к эпику со временем3.", "_описание_",
+                status1, epic.getId(), duration1, crossTime);
+        SubTask subTaskTime4 = new SubTask("Подзадача к эпику со временем4.", "_описание_",
+                status3, epic.getId(), duration1, lastestTime);
+        SubTask subTaskTime5 = new SubTask("Подзадача к эпику со временем5.", "_описание_",
+                status1, epic.getId(), duration4, startTime4);
+        SubTask subTaskTime6 = new SubTask("Подзадача к эпику со временем6.", "_описание_",
+                status2, epic.getId(), duration4, startTime5);
+        taskManager.setSubTask(subTaskTime);
+        taskManager.setSubTask(subTaskTime2);
+        taskManager.setSubTask(subTaskTime3);
+        Duration epicDuration = subTaskTime.getDuration().plus(subTaskTime2.getDuration());
+        assertEquals(Status.NEW, epic.getStatus(), "Неверный статус при всех подзадачах NEW");
+        assertEquals(epic.getStartTime(), TimeOfFirstSubt, "Неверное расчетное время старта эпика");
+        assertEquals(epic.getDuration(), epicDuration, "Неверный расчетный срок исполнения эпика");
+        List<SubTask> subTasks = taskManager.getSubtasksList();
+        assertEquals(2, subTasks.size(), "Подгружена подзадача с конфликтом по времени исполнения");
+        subTaskTime.setStatus(Status.DONE);
+        subTaskTime2.setStatus(Status.DONE);
+        subTaskTime3.setStatus(Status.DONE);
+        taskManager.setSubTask(subTaskTime4);
+        assertEquals(Status.DONE, epic.getStatus(), "Неверный статус при всех подзадачах DONE");
+        taskManager.setSubTask(subTaskTime5);
+        assertEquals(Status.IN_PROGRESS, epic.getStatus(), "Неверный статус,есть невыполенные задачи");
+        subTasks = taskManager.getSubtasksList();
+        assertEquals(4, subTasks.size(), "Подгружены не все подзадачи");
+        subTaskTime4.setStatus(Status.IN_PROGRESS);
+        subTaskTime4.setStatus(Status.IN_PROGRESS);
+        taskManager.setSubTask(subTaskTime6);
+        assertEquals(Status.IN_PROGRESS, epic.getStatus(), "Неверный статус при задачах в процессе исполнения");
     }
 }

@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public interface TaskManager {
     int createId();
@@ -55,5 +52,7 @@ public interface TaskManager {
     LinkedHashMap<Integer, Task> getTaskAndSubtasks();
 
     List<Task> getHistory();
+
+    Set<Task> getPrioritizedTasks();
 }
 
