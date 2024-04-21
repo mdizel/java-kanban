@@ -51,7 +51,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
         if (type == TypeOfTask.EPIC) {
             return new Epic(id, splTask[2], splTask[4], status);
-                    } else if (type == TypeOfTask.SUBTASK) {
+        } else if (type == TypeOfTask.SUBTASK) {
             int parentsId = Integer.parseInt(splTask[7]);
             if (startTime != null) {
                 return new SubTask(id, splTask[2], splTask[4], status, parentsId, duration, startTime);
@@ -155,44 +155,44 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public boolean changeTask(Task task) {
-        boolean isSuccess = super.changeTask(task);
+        boolean success = super.changeTask(task);
         save();
-        return isSuccess;
+        return success;
     }
 
     @Override
     public boolean changeEpic(Epic epic) {
-        boolean isSuccess = super.changeEpic(epic);
+        boolean success = super.changeEpic(epic);
         save();
-        return isSuccess;
+        return success;
     }
 
     @Override
     public boolean changeSubTask(SubTask subTask) {
-        boolean isSuccess = super.changeSubTask(subTask);
+        boolean success = super.changeSubTask(subTask);
         save();
-        return isSuccess;
+        return success;
     }
 
     @Override
     public boolean deleteTask(int id) {
-        boolean isSuccess = super.deleteTask(id);
+        boolean success = super.deleteTask(id);
         save();
-        return isSuccess;
+        return success;
     }
 
     @Override
     public boolean deleteEpic(int id) {
-        boolean isSuccess = super.deleteEpic(id);
+        boolean success = super.deleteEpic(id);
         save();
-        return isSuccess;
+        return success;
     }
 
     @Override
     public boolean deleteSubTask(int id) {
-        boolean isSuccess = super.deleteSubTask(id);
+        boolean success = super.deleteSubTask(id);
         save();
-        return isSuccess;
+        return success;
     }
 
     @Override

@@ -17,6 +17,7 @@ import java.util.Optional;
 public class TaskHandler implements HttpHandler {
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     TaskManager taskManager;
+
     Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .registerTypeAdapter(Duration.class, new DurationAdapter())
@@ -31,7 +32,6 @@ public class TaskHandler implements HttpHandler {
         String requestPath = exchange.getRequestURI().getPath();
         String[] pathSplit = requestPath.split("/");
         String pathBeginning = pathSplit[1];
-
         switch (pathBeginning) {
             case "tasks": {
                 handleTaskRequest(exchange);
@@ -56,7 +56,6 @@ public class TaskHandler implements HttpHandler {
             default:
                 writeResponse(exchange, "Bad request", 404);
         }
-
     }
 
     private void handleTaskRequest(HttpExchange exchange) throws IOException {

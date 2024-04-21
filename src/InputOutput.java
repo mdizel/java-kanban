@@ -12,8 +12,6 @@ public class InputOutput {
     File file = new File(fileName);
     Scanner scanner = new Scanner(System.in);
     TaskManager taskManager;
-
-
     int count = 1;
 
     TaskManager managerChoose() {
