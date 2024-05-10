@@ -17,7 +17,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.fileName = fileName;
     }
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy время: HH:mm");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     private void save() {
         try (FileWriter writer = new FileWriter(fileName, CHARSET);
@@ -51,7 +51,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
         if (type == TypeOfTask.EPIC) {
             return new Epic(id, splTask[2], splTask[4], status);
-                    } else if (type == TypeOfTask.SUBTASK) {
+        } else if (type == TypeOfTask.SUBTASK) {
             int parentsId = Integer.parseInt(splTask[7]);
             if (startTime != null) {
                 return new SubTask(id, splTask[2], splTask[4], status, parentsId, duration, startTime);
@@ -154,39 +154,45 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void changeTask(Task task) {
-        super.changeTask(task);
+    public boolean changeTask(Task task) {
+        boolean success = super.changeTask(task);
         save();
+        return success;
     }
 
     @Override
-    public void changeEpic(Epic epic) {
-        super.changeEpic(epic);
+    public boolean changeEpic(Epic epic) {
+        boolean success = super.changeEpic(epic);
         save();
+        return success;
     }
 
     @Override
-    public void changeSubTask(SubTask subTask) {
-        super.changeSubTask(subTask);
+    public boolean changeSubTask(SubTask subTask) {
+        boolean success = super.changeSubTask(subTask);
         save();
+        return success;
     }
 
     @Override
-    public void deleteTask(int id) {
-        super.deleteTask(id);
+    public boolean deleteTask(int id) {
+        boolean success = super.deleteTask(id);
         save();
+        return success;
     }
 
     @Override
-    public void deleteEpic(int id) {
-        super.deleteEpic(id);
+    public boolean deleteEpic(int id) {
+        boolean success = super.deleteEpic(id);
         save();
+        return success;
     }
 
     @Override
-    public void deleteSubTask(int id) {
-        super.deleteSubTask(id);
+    public boolean deleteSubTask(int id) {
+        boolean success = super.deleteSubTask(id);
         save();
+        return success;
     }
 
     @Override

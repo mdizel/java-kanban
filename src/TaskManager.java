@@ -15,11 +15,11 @@ public interface TaskManager {
 
     ArrayList<SubTask> getSubtasksList();
 
-    void changeTask(Task task);
+    boolean changeTask(Task task);
 
-    void changeEpic(Epic epic);
+    boolean changeEpic(Epic epic);
 
-    void changeSubTask(SubTask subTask);
+    boolean changeSubTask(SubTask subTask);
 
     ArrayList<SubTask> getSubtaskFromEpicList(int epicId);
 
@@ -35,11 +35,11 @@ public interface TaskManager {
 
     void deleteAllSubTasks();
 
-    void deleteTask(int id);
+    boolean deleteTask(int id);
 
-    void deleteEpic(int id);
+    boolean deleteEpic(int id);
 
-    void deleteSubTask(int id);
+    boolean deleteSubTask(int id);
 
     void checkStatus(int parentsId);
 

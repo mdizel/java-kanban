@@ -9,9 +9,9 @@ public class Task {
     protected Status status;
     protected TypeOfTask typeOfTask;
     protected int id;
-    private Duration duration;
-    private LocalDateTime startTime;
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy время: HH:mm");
+    protected Duration duration;
+    protected LocalDateTime startTime;
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     public Task(String name, String description, Status status) {
         this.name = name;

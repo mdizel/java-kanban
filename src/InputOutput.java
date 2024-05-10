@@ -1,3 +1,6 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.File;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -41,7 +44,11 @@ public class InputOutput {
         count++;
     }
 
-    public void test() {                           // Метод для теста программы
+    public void test() {                      // Метод для теста программы
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .registerTypeAdapter(Duration.class, new DurationAdapter())
+                .create();
         taskManager = managerChoose();
         System.out.println("Список задач после загрузки из файла:");
         print();
@@ -106,7 +113,7 @@ public class InputOutput {
         System.out.println("Список эпиков");
         System.out.println("Удаляем задачу 10001, подзадачу 10005, эпик 10009");
         taskManager.deleteTask(10001);
-        taskManager.deleteEpic(10009);
+        //taskManager.deleteEpic(10009);
         taskManager.deleteSubTask(10005);
         print();
         System.out.println("Получаем подзадачи Эпика 10004");
@@ -139,6 +146,9 @@ public class InputOutput {
         taskManager.changeTask(taskTime5);
         System.out.println("Список задач сортированных по времени после обновления задачи");
         System.out.println(taskManager.getPrioritizedTasks());
+        System.out.println("________________________________________");
+        System.out.println(taskManager.getTasksList());
+        System.out.println(gson.toJson(taskTime));
     }
 
     Task task = new Task("Покрасить стены", "Нужно покрасить стены в коридоре в синий цвет.", Status.NEW);
@@ -160,7 +170,7 @@ public class InputOutput {
             Status.NEW, 10004);
     SubTask subTask4 = new SubTask(10006, "Залить фундамент", "Заказать бетон вызвать бетоннасос",
             Status.NEW, 10004);
-    SubTask subTask5 = new SubTask("Привезти доски", "Привезти доски с рынка", Status.NEW, 10009);
+    SubTask subTask5 = new SubTask("Привезти доски", "Привезти доски с рынка", Status.NEW, 10007);
     SubTask subTask6 = new SubTask("Просто подзадача к эпику.", "Добавление по id эпика",
             Status.DONE, 10007);
     SubTask subTask7 = new SubTask(10007, "Ошибочная подзадача для эпика",
@@ -179,10 +189,10 @@ public class InputOutput {
             Duration.ofMinutes(119), LocalDateTime.parse("2024-04-06T11:20:00"));
     Task taskTime2 = new Task("Задача со временем 2", "----2", Status.NEW, Duration.ofMinutes(180),
             LocalDateTime.parse("2024-04-01T11:00:00"));
-    Task taskTime3 = new Task("Задача со временем 3", "----3", Status.NEW, Duration.ofMinutes(320),
+    Task taskTime3 = new Task("Задача со временем 3", "----3", Status.NEW, Duration.ofMinutes(240),
+            LocalDateTime.parse("2024-04-08T07:00:00"));
+    Task taskTime4 = new Task("Задача со временем наложение", "----4", Status.NEW, Duration.ofMinutes(50),
             LocalDateTime.parse("2024-04-01T07:00:00"));
-    Task taskTime4 = new Task("Задача со временем наложение", "----4", Status.NEW, Duration.ofMinutes(240),
-            LocalDateTime.parse("2024-04-01T08:00:00"));
     Epic epicTime = new Epic("Эпик со временем 1", "----э1", Status.NEW);
     SubTask subTaskTime = new SubTask("Подзадача к эпику 10007 со временем1.", "______сб1",
             Status.IN_PROGRESS, 10007, Duration.ofMinutes(60), LocalDateTime.parse("2024-04-01T18:15:00"));
